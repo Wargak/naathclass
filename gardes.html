@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edulg | Grades & Performance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(0, 0, 0, 0.2);
+            --a-plus: #38b000;
+            --a: #4cc9f0;
+            --b: #ffd166;
+            --c: #f8961e;
+            --d: #f3722c;
+            --f: #ef233c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Floating Background Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--success));
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+            background: linear-gradient(45deg, var(--accent), var(--warning));
+        }
+
+        .floating-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: -10s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(30px) rotate(240deg);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo i {
+            color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--success);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--success);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--success), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 5s infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--success), #38b000);
+            color: white;
+        }
+
+        /* Performance Overview */
+        .overview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .overview-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--success);
+        }
+
+        .overview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .overview-title {
+            font-size: 1.3rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gpa-display {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 1rem 0;
+            background: linear-gradient(45deg, var(--success), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .gpa-label {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Grade Distribution */
+        .grade-distribution {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            gap: 15px;
+            margin: 2rem 0;
+            padding: 0 1rem;
+        }
+
+        .grade-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            min-height: 10px;
+        }
+
+        .grade-bar:hover {
+            transform: scale(1.05);
+        }
+
+        .grade-bar.a-plus { background: linear-gradient(to top, var(--a-plus), #2d9100); }
+        .grade-bar.a { background: linear-gradient(to top, var(--a), #3aa8d3); }
+        .grade-bar.b { background: linear-gradient(to top, var(--b), #e6b800); }
+        .grade-bar.c { background: linear-gradient(to top, var(--c), #d87c0f); }
+        .grade-bar.d { background: linear-gradient(to top, var(--d), #d85c0f); }
+        .grade-bar.f { background: linear-gradient(to top, var(--f), #cc1c2c); }
+
+        .grade-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .grade-count {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Grades Table */
+        .grades-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .grades-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grades-title {
+            font-size: 1.3rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            min-width: 150px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            min-width: 250px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        th {
+            padding: 1.2rem 2rem;
+            text-align: left;
+            font-weight: 500;
+            color: #aaa;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 1.2rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ddd;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .class-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .class-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .class-name {
+            font-weight: 500;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .class-teacher {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .grade-cell {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .grade-a-plus { color: var(--a-plus); }
+        .grade-a { color: var(--a); }
+        .grade-b { color: var(--b); }
+        .grade-c { color: var(--c); }
+        .grade-d { color: var(--d); }
+        .grade-f { color: var(--f); }
+
+        .progress-cell {
+            min-width: 150px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .action-cell {
+            min-width: 120px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-view {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        .btn-edit {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-download {
+            background: rgba(56, 176, 0, 0.1);
+            color: var(--a-plus);
+        }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Analytics Section */
+        .analytics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .analytics-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .analytics-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .analytics-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .analytics-title {
+            font-size: 1.3rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-container {
+            height: 250px;
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        /* Grade Calculator */
+        .calculator-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .calculator-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: white;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* Grade Scale Info */
+        .grade-scale {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .scale-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .scale-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scale-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #aaa;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .overview-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .grade-distribution {
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .grades-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            .search-box, .filter-select {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .grade-distribution {
+                gap: 8px;
+            }
+            
+            .grade-label {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+            <i class="fas fa-graduation-cap"></i>
+            </a>
+            <span>EDULG</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="class.html">Classes</a></li>
+            <li><a href="assignment.html">Assignments</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="gardes.html" class="active">Grades</a></li>
+            <li><a href="resources.html">Resources</a></li>
+        </ul>
+        <div class="user-profile">
+            <div class="avatar">
+                <a href="admin.html">
+                <img src="images/1.jpg" alt="Wargak Nhial">
+                </a>
+            </div>
+            <span>Wargak Nhial</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Grades & Performance</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="exportGrades()">
+                    <i class="fas fa-download"></i>
+                    Export Report
+                </button>
+                <button class="btn btn-primary" onclick="showGradeCalculator()">
+                    <i class="fas fa-calculator"></i>
+                    Grade Calculator
+                </button>
+            </div>
+        </div>
+
+        <!-- Performance Overview -->
+        <div class="overview-container">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3 class="overview-title">
+                        <i class="fas fa-chart-line"></i>
+                        Overall GPA
+                    </h3>
+                    <span style="color: var(--success); font-weight: 600; font-size: 1.1rem;">
+                        <i class="fas fa-arrow-up"></i>
+                        5.2% from last term
+                    </span>
+                </div>
+                <div class="gpa-display" id="overallGPA">3.75</div>
+                <div class="gpa-label">Cumulative Grade Point Average</div>
+                
+                <!-- Grade Distribution -->
+                <div class="grade-distribution" id="gradeDistribution">
+                    <!-- Grade bars will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3 class="overview-title">
+                        <i class="fas fa-trophy"></i>
+                        Performance Summary
+                    </h3>
+                </div>
+                <div style="margin: 1.5rem 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="color: #aaa;">Highest Grade:</span>
+                        <span style="color: var(--a-plus); font-weight: 600;">A+ (98%)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="color: #aaa;">Lowest Grade:</span>
+                        <span style="color: var(--b); font-weight: 600;">B (82%)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="color: #aaa;">Average Grade:</span>
+                        <span style="color: var(--a); font-weight: 600;">A- (90%)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="color: #aaa;">Credits Earned:</span>
+                        <span style="color: white; font-weight: 600;">45 / 120</span>
+                    </div>
+                </div>
+                <div class="progress-bar" style="margin-top: 1.5rem;">
+                    <div class="progress-fill" style="width: 37.5%; background: linear-gradient(90deg, var(--primary), var(--success));"></div>
+                </div>
+                <div class="progress-text">37.5% of total credits completed</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h3 class="overview-title">
+                        <i class="fas fa-bullseye"></i>
+                        This Term's Goals
+                    </h3>
+                    <span style="color: var(--warning); font-weight: 600; font-size: 1.1rem;">
+                        2 weeks remaining
+                    </span>
+                </div>
+                <div style="margin: 1.5rem 0;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #aaa;">Maintain GPA ≥ 3.7</span>
+                            <span style="color: var(--success); font-weight: 600;">On Track</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 95%; background: var(--success);"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #aaa;">Complete all assignments</span>
+                            <span style="color: var(--warning); font-weight: 600;">2 Pending</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 87%; background: var(--warning);"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #aaa;">Improve in Mathematics</span>
+                            <span style="color: var(--success); font-weight: 600;">+12%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 88%; background: var(--primary);"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="showGoalSetting()">
+                    <i class="fas fa-edit"></i>
+                    Set New Goals
+                </button>
+            </div>
+        </div>
+
+        <!-- Grades Table -->
+        <div class="grades-container">
+            <div class="grades-header">
+                <h3 class="grades-title">
+                    <i class="fas fa-list-alt"></i>
+                    Course Grades
+                </h3>
+                <div class="filter-controls">
+                    <select class="filter-select" id="filterTerm" onchange="filterGrades()">
+                        <option value="all">All Terms</option>
+                        <option value="spring-2023">Spring 2023</option>
+                        <option value="fall-2022">Fall 2022</option>
+                        <option value="spring-2022">Spring 2022</option>
+                    </select>
+                    <select class="filter-select" id="filterGrade" onchange="filterGrades()">
+                        <option value="all">All Grades</option>
+                        <option value="a-plus">A+</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                        <option value="c">C</option>
+                    </select>
+                    <input type="text" class="search-box" id="searchGrades" placeholder="Search courses..." onkeyup="searchGrades()">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Grade</th>
+                        <th>Percentage</th>
+                        <th>Progress</th>
+                        <th>Credit Hours</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesTable">
+                    <!-- Grades will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="analytics-container">
+            <div class="analytics-card">
+                <div class="analytics-header">
+                    <h3 class="analytics-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Grade Trend
+                    </h3>
+                </div>
+                <div class="chart-container">
+                    <!-- Grade trend chart would go here -->
+                    <div style="display: flex; align-items: flex-end; height: 200px; gap: 20px; padding: 0 1rem;">
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                            <div style="background: linear-gradient(to top, var(--primary), var(--secondary)); width: 30px; border-radius: 6px 6px 0 0; height: 180px;"></div>
+                            <div style="margin-top: 10px; color: #aaa; font-size: 0.9rem;">Term 1</div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                            <div style="background: linear-gradient(to top, var(--primary), var(--secondary)); width: 30px; border-radius: 6px 6px 0 0; height: 160px;"></div>
+                            <div style="margin-top: 10px; color: #aaa; font-size: 0.9rem;">Term 2</div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                            <div style="background: linear-gradient(to top, var(--primary), var(--secondary)); width: 30px; border-radius: 6px 6px 0 0; height: 190px;"></div>
+                            <div style="margin-top: 10px; color: #aaa; font-size: 0.9rem;">Term 3</div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                            <div style="background: linear-gradient(to top, var(--success), #38b000); width: 30px; border-radius: 6px 6px 0 0; height: 210px;"></div>
+                            <div style="margin-top: 10px; color: white; font-weight: 600; font-size: 0.9rem;">Current</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; color: #aaa; font-size: 0.9rem; margin-top: 1rem;">
+                    Steady improvement over 4 academic terms
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-header">
+                    <h3 class="analytics-title">
+                        <i class="fas fa-balance-scale"></i>
+                        Grade Distribution
+                    </h3>
+                </div>
+                <div style="margin: 1.5rem 0;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="width: 15px; height: 15px; border-radius: 4px; background: var(--a-plus);"></div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>A+ (95-100%)</span>
+                                <span>2 courses</span>
+                            </div>
+                            <div class="progress-bar" style="margin-top: 5px;">
+                                <div class="progress-fill" style="width: 25%; background: var(--a-plus);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="width: 15px; height: 15px; border-radius: 4px; background: var(--a);"></div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>A (90-94%)</span>
+                                <span>4 courses</span>
+                            </div>
+                            <div class="progress-bar" style="margin-top: 5px;">
+                                <div class="progress-fill" style="width: 50%; background: var(--a);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="width: 15px; height: 15px; border-radius: 4px; background: var(--b);"></div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>B (80-89%)</span>
+                                <span>2 courses</span>
+                            </div>
+                            <div class="progress-bar" style="margin-top: 5px;">
+                                <div class="progress-fill" style="width: 25%; background: var(--b);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; color: var(--success); font-weight: 600;">
+                    <i class="fas fa-star"></i>
+                    Top 15% of your class
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade Calculator -->
+        <div class="calculator-container" id="gradeCalculator" style="display: none;">
+            <div class="analytics-header">
+                <h3 class="analytics-title">
+                    <i class="fas fa-calculator"></i>
+                    Grade Calculator
+                </h3>
+                <button class="btn btn-secondary" onclick="hideGradeCalculator()">
+                    <i class="fas fa-times"></i>
+                    Close
+                </button>
+            </div>
+            
+            <div class="calculator-grid">
+                <div class="calculator-input">
+                    <h4 style="margin-bottom: 1rem; color: white;">Calculate Final Grade</h4>
+                    <div class="input-row">
+                        <input type="number" class="input-field" id="currentGrade" placeholder="Current Grade %" min="0" max="100" step="0.1">
+                        <input type="number" class="input-field" id="finalWeight" placeholder="Final Exam Weight %" min="0" max="100" step="0.1">
+                    </div>
+                    <div class="input-row">
+                        <input type="number" class="input-field" id="desiredGrade" placeholder="Desired Final Grade %" min="0" max="100" step="0.1">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="calculateFinalGrade()">
+                        Calculate Needed Score
+                    </button>
+                    <div id="calculationResult" style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; display: none;">
+                        <h4 style="color: var(--success); margin-bottom: 0.5rem;">Result</h4>
+                        <p id="resultText"></p>
+                    </div>
+                </div>
+
+                <div class="calculator-input">
+                    <h4 style="margin-bottom: 1rem; color: white;">GPA Calculator</h4>
+                    <div id="gpaInputs">
+                        <!-- GPA inputs will be added dynamically -->
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem;" onclick="addGpaCourse()">
+                        <i class="fas fa-plus"></i>
+                        Add Course
+                    </button>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="calculateGPA()">
+                        Calculate GPA
+                    </button>
+                    <div id="gpaResult" style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; display: none;">
+                        <h4 style="color: var(--success); margin-bottom: 0.5rem;">GPA Result</h4>
+                        <p id="gpaResultText"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade Scale Information -->
+        <div class="grade-scale">
+            <h4 style="color: white; margin-bottom: 1rem;">
+                <i class="fas fa-info-circle"></i>
+                Grade Scale Information
+            </h4>
+            <div class="scale-grid">
+                <div class="scale-item">
+                    <div class="scale-color" style="background: var(--a-plus);"></div>
+                    <div>
+                        <div style="font-weight: 600;">A+</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">95-100% (4.0)</div>
+                    </div>
+                </div>
+                <div class="scale-item">
+                    <div class="scale-color" style="background: var(--a);"></div>
+                    <div>
+                        <div style="font-weight: 600;">A</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">90-94% (4.0)</div>
+                    </div>
+                </div>
+                <div class="scale-item">
+                    <div class="scale-color" style="background: var(--b);"></div>
+                    <div>
+                        <div style="font-weight: 600;">B</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">80-89% (3.0)</div>
+                    </div>
+                </div>
+                <div class="scale-item">
+                    <div class="scale-color" style="background: var(--c);"></div>
+                    <div>
+                        <div style="font-weight: 600;">C</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">70-79% (2.0)</div>
+                    </div>
+                </div>
+                <div class="scale-item">
+                    <div class="scale-color" style="background: var(--d);"></div>
+                    <div>
+                        <div style="font-weight: 600;">D</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">60-69% (1.0)</div>
+                    </div>
+                </div>
+                <div class="scale-item">
+                    <div class="scale-color" style="background: var(--f);"></div>
+                    <div>
+                        <div style="font-weight: 600;">F</div>
+                        <div style="font-size: 0.8rem; color: #aaa;">Below 60% (0.0)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grade Details Modal -->
+    <div class="modal" id="gradeDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Grade Details
+                </h2>
+                <button class="close-modal" onclick="closeGradeDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Course Information</label>
+                    <div class="form-input" style="background: var(--glass-dark);">
+                        <p><strong>Course:</strong> <span id="detailCourseName">Loading...</span></p>
+                        <p><strong>Instructor:</strong> <span id="detailInstructor">Loading...</span></p>
+                        <p><strong>Credit Hours:</strong> <span id="detailCredits">Loading...</span></p>
+                        <p><strong>Term:</strong> <span id="detailTerm">Loading...</span></p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Current Grade</label>
+                        <div class="form-input" style="background: var(--glass-dark); text-align: center;">
+                            <div id="detailGrade" style="font-size: 2.5rem; font-weight: 800; color: var(--success);">A</div>
+                            <div id="detailPercentage" style="color: #aaa;">92.5%</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Grade Points</label>
+                        <div class="form-input" style="background: var(--glass-dark); text-align: center;">
+                            <div id="detailGradePoints" style="font-size: 2.5rem; font-weight: 800; color: white;">4.0</div>
+                            <div style="color: #aaa;">Quality Points</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Assignment Breakdown</label>
+                    <div id="assignmentBreakdown">
+                        <!-- Assignment breakdown will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="downloadGradeReport()">
+                        <i class="fas fa-download"></i>
+                        Download Report
+                    </button>
+                    <button class="btn btn-primary" onclick="viewImprovementTips()">
+                        <i class="fas fa-lightbulb"></i>
+                        Improvement Tips
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Goal Setting Modal -->
+    <div class="modal" id="goalSettingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-bullseye"></i>
+                    Set Academic Goals
+                </h2>
+                <button class="close-modal" onclick="closeGoalSettingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="goalSettingForm">
+                    <div class="form-group">
+                        <label class="form-label">Target GPA</label>
+                        <input type="number" class="form-input" id="targetGPA" min="0" max="4.0" step="0.1" value="3.8" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Goal Description</label>
+                        <textarea class="form-textarea" id="goalDescription" placeholder="Describe your academic goals for this term..." rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Target Date</label>
+                            <input type="date" class="form-input" id="goalTargetDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select" id="goalPriority" required>
+                                <option value="high">High Priority</option>
+                                <option value="medium" selected>Medium Priority</option>
+                                <option value="low">Low Priority</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Focus Areas</label>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="focusAreas" value="mathematics">
+                                Mathematics
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="focusAreas" value="physics">
+                                Physics
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="focusAreas" value="programming">
+                                Programming
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="focusAreas" value="writing">
+                                Writing
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="checkbox" name="focusAreas" value="research">
+                                Research
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeGoalSettingModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i>
+                            Set Goals
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Grades Data
+        let grades = [
+            {
+                id: 1,
+                course: "Advanced Mathematics",
+                instructor: "Dr. Sarah Johnson",
+                grade: "A+",
+                percentage: 98.5,
+                gradePoints: 4.0,
+                credits: 4,
+                term: "Spring 2023",
+                assignments: [
+                    { name: "Problem Set 1", score: 95, weight: 10 },
+                    { name: "Problem Set 2", score: 98, weight: 10 },
+                    { name: "Midterm Exam", score: 100, weight: 30 },
+                    { name: "Final Project", score: 97, weight: 25 },
+                    { name: "Final Exam", score: 99, weight: 25 }
+                ],
+                progress: 100
+            },
+            {
+                id: 2,
+                course: "Quantum Physics",
+                instructor: "Prof. Michael Chen",
+                grade: "A",
+                percentage: 92.3,
+                gradePoints: 4.0,
+                credits: 3,
+                term: "Spring 2023",
+                assignments: [
+                    { name: "Lab Reports", score: 94, weight: 20 },
+                    { name: "Quantum Theory Essay", score: 88, weight: 25 },
+                    { name: "Midterm Exam", score: 95, weight: 25 },
+                    { name: "Final Exam", score: 90, weight: 30 }
+                ],
+                progress: 100
+            },
+            {
+                id: 3,
+                course: "Web Development",
+                instructor: "Alex Rivera",
+                grade: "A",
+                percentage: 94.2,
+                gradePoints: 4.0,
+                credits: 3,
+                term: "Spring 2023",
+                assignments: [
+                    { name: "HTML/CSS Project", score: 96, weight: 15 },
+                    { name: "JavaScript Quiz", score: 92, weight: 10 },
+                    { name: "React Project", score: 95, weight: 25 },
+                    { name: "Final Portfolio", score: 93, weight: 35 },
+                    { name: "Class Participation", score: 96, weight: 15 }
+                ],
+                progress: 100
+            },
+            {
+                id: 4,
+                course: "Organic Chemistry",
+                instructor: "Dr. Emily Wilson",
+                grade: "B+",
+                percentage: 87.8,
+                gradePoints: 3.3,
+                credits: 4,
+                term: "Fall 2022",
+                assignments: [
+                    { name: "Lab Experiments", score: 85, weight: 30 },
+                    { name: "Midterm Exam", score: 90, weight: 25 },
+                    { name: "Research Paper", score: 85, weight: 20 },
+                    { name: "Final Exam", score: 88, weight: 25 }
+                ],
+                progress: 100
+            },
+            {
+                id: 5,
+                course: "Data Structures",
+                instructor: "Dr. Robert Kim",
+                grade: "A-",
+                percentage: 90.5,
+                gradePoints: 3.7,
+                credits: 3,
+                term: "Fall 2022",
+                assignments: [
+                    { name: "Programming Assignments", score: 92, weight: 30 },
+                    { name: "Algorithm Analysis", score: 88, weight: 25 },
+                    { name: "Final Project", score: 91, weight: 30 },
+                    { name: "Quizzes", score: 92, weight: 15 }
+                ],
+                progress: 100
+            },
+            {
+                id: 6,
+                course: "English Literature",
+                instructor: "Prof. James Wilson",
+                grade: "B",
+                percentage: 84.2,
+                gradePoints: 3.0,
+                credits: 3,
+                term: "Spring 2022",
+                assignments: [
+                    { name: "Essay 1", score: 82, weight: 20 },
+                    { name: "Essay 2", score: 85, weight: 25 },
+                    { name: "Midterm Exam", score: 80, weight: 25 },
+                    { name: "Final Paper", score: 88, weight: 30 }
+                ],
+                progress: 100
+            }
+        ];
+
+        // Current State
+        let selectedGradeId = null;
+        let currentTermFilter = 'all';
+        let currentGradeFilter = 'all';
+        let gpaCourses = 3; // Number of courses in GPA calculator
+
+        // DOM Elements
+        const gradesTable = document.getElementById('gradesTable');
+        const overallGPA = document.getElementById('overallGPA');
+        const gradeDistribution = document.getElementById('gradeDistribution');
+        const gradeDetailsModal = document.getElementById('gradeDetailsModal');
+        const goalSettingModal = document.getElementById('goalSettingModal');
+        const gradeCalculator = document.getElementById('gradeCalculator');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderGradesTable();
+            calculateOverallGPA();
+            renderGradeDistribution();
+            setupEventListeners();
+            
+            // Initialize GPA calculator with default courses
+            initializeGpaCalculator();
+            
+            // Set goal target date to end of current month
+            const today = new Date();
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            document.getElementById('goalTargetDate').value = lastDay.toISOString().split('T')[0];
+        });
+
+        function renderGradesTable() {
+            let filteredGrades = filterGradesData();
+            
+            if (filteredGrades.length === 0) {
+                gradesTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem;">
+                            <div class="empty-state" style="padding: 0;">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>No grades found matching your filters</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            gradesTable.innerHTML = '';
+            
+            filteredGrades.forEach(grade => {
+                const row = document.createElement('tr');
+                
+                // Get grade color class
+                const gradeClass = getGradeColorClass(grade.grade);
+                const progressColor = getProgressColor(grade.percentage);
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="class-info">
+                            <div class="class-icon" style="background: linear-gradient(45deg, ${getCourseColor(grade.course)}, ${darkenColor(getCourseColor(grade.course), 20)})">
+                                <i class="fas ${getCourseIcon(grade.course)}"></i>
+                            </div>
+                            <div>
+                                <div class="class-name">${grade.course}</div>
+                                <div class="class-teacher">${grade.instructor} • ${grade.term}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="grade-cell ${gradeClass}">${grade.grade}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600; color: ${getPercentageColor(grade.percentage)};">${grade.percentage.toFixed(1)}%</div>
+                        <div style="font-size: 0.85rem; color: #aaa;">${grade.gradePoints} GPA</div>
+                    </td>
+                    <td class="progress-cell">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${grade.progress}%; background: ${progressColor};"></div>
+                        </div>
+                        <div class="progress-text">${grade.progress}% complete</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600; color: white;">${grade.credits}</div>
+                        <div style="font-size: 0.85rem; color: #aaa;">credit hours</div>
+                    </td>
+                    <td class="action-cell">
+                        <div class="action-buttons">
+                            <button class="btn-icon btn-view" onclick="viewGradeDetails(${grade.id})" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon btn-download" onclick="downloadGradeReport(${grade.id})" title="Download Report">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn-icon btn-edit" onclick="requestRegrade(${grade.id})" title="Request Regrade">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                gradesTable.appendChild(row);
+            });
+        }
+
+        function filterGradesData() {
+            let filtered = [...grades];
+            
+            // Filter by term
+            if (currentTermFilter !== 'all') {
+                filtered = filtered.filter(g => g.term.toLowerCase().includes(currentTermFilter));
+            }
+            
+            // Filter by grade
+            if (currentGradeFilter !== 'all') {
+                filtered = filtered.filter(g => {
+                    const gradeLetter = g.grade.charAt(0).toLowerCase();
+                    if (currentGradeFilter === 'a-plus') return g.grade === 'A+';
+                    return gradeLetter === currentGradeFilter.charAt(0);
+                });
+            }
+            
+            return filtered;
+        }
+
+        function filterGrades() {
+            currentTermFilter = document.getElementById('filterTerm').value;
+            currentGradeFilter = document.getElementById('filterGrade').value;
+            renderGradesTable();
+        }
+
+        function searchGrades() {
+            const searchTerm = document.getElementById('searchGrades').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderGradesTable();
+                return;
+            }
+            
+            const filtered = grades.filter(grade => 
+                grade.course.toLowerCase().includes(searchTerm) ||
+                grade.instructor.toLowerCase().includes(searchTerm) ||
+                grade.grade.toLowerCase().includes(searchTerm) ||
+                grade.term.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filtered.length === 0) {
+                gradesTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem;">
+                            <div class="empty-state" style="padding: 0;">
+                                <i class="fas fa-search"></i>
+                                <p>No grades found for "${searchTerm}"</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Show filtered results
+            gradesTable.innerHTML = '';
+            filtered.forEach(grade => {
+                const gradeClass = getGradeColorClass(grade.grade);
+                const progressColor = getProgressColor(grade.percentage);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="class-info">
+                            <div class="class-icon" style="background: linear-gradient(45deg, ${getCourseColor(grade.course)}, ${darkenColor(getCourseColor(grade.course), 20)})">
+                                <i class="fas ${getCourseIcon(grade.course)}"></i>
+                            </div>
+                            <div>
+                                <div class="class-name">${grade.course}</div>
+                                <div class="class-teacher">${grade.instructor}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><div class="grade-cell ${gradeClass}">${grade.grade}</div></td>
+                    <td><div style="color: ${getPercentageColor(grade.percentage)};">${grade.percentage.toFixed(1)}%</div></td>
+                    <td><div class="progress-bar"><div class="progress-fill" style="width: ${grade.progress}%; background: ${progressColor};"></div></div></td>
+                    <td>${grade.credits}</td>
+                    <td>
+                        <button class="btn-icon btn-view" onclick="viewGradeDetails(${grade.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                `;
+                gradesTable.appendChild(row);
+            });
+        }
+
+        function calculateOverallGPA() {
+            // Calculate weighted GPA
+            let totalGradePoints = 0;
+            let totalCredits = 0;
+            
+            grades.forEach(grade => {
+                totalGradePoints += grade.gradePoints * grade.credits;
+                totalCredits += grade.credits;
+            });
+            
+            const gpa = totalCredits > 0 ? totalGradePoints / totalCredits : 0;
+            overallGPA.textContent = gpa.toFixed(2);
+            
+            // Update stats
+            updateStats();
+        }
+
+        function renderGradeDistribution() {
+            // Count grades by letter
+            const gradeCounts = {
+                'A+': 0, 'A': 0, 'A-': 0,
+                'B+': 0, 'B': 0, 'B-': 0,
+                'C+': 0, 'C': 0, 'C-': 0,
+                'D': 0, 'F': 0
+            };
+            
+            grades.forEach(grade => {
+                if (gradeCounts[grade.grade] !== undefined) {
+                    gradeCounts[grade.grade]++;
+                }
+            });
+            
+            // Find max count for scaling
+            const maxCount = Math.max(...Object.values(gradeCounts));
+            
+            gradeDistribution.innerHTML = '';
+            
+            // Show only grades that have counts
+            Object.entries(gradeCounts).forEach(([grade, count]) => {
+                if (count > 0) {
+                    const height = maxCount > 0 ? (count / maxCount) * 180 : 10;
+                    const bar = document.createElement('div');
+                    bar.className = `grade-bar ${getGradeBarClass(grade)}`;
+                    bar.style.height = `${height}px`;
+                    bar.innerHTML = `
+                        <div class="grade-count">${count}</div>
+                        <div class="grade-label">${grade}</div>
+                    `;
+                    gradeDistribution.appendChild(bar);
+                }
+            });
+        }
+
+        function viewGradeDetails(gradeId) {
+            selectedGradeId = gradeId;
+            const grade = grades.find(g => g.id === gradeId);
+            
+            if (!grade) return;
+            
+            document.getElementById('detailCourseName').textContent = grade.course;
+            document.getElementById('detailInstructor').textContent = grade.instructor;
+            document.getElementById('detailCredits').textContent = `${grade.credits} credit hours`;
+            document.getElementById('detailTerm').textContent = grade.term;
+            document.getElementById('detailGrade').textContent = grade.grade;
+            document.getElementById('detailGrade').style.color = getGradeColor(grade.grade);
+            document.getElementById('detailPercentage').textContent = `${grade.percentage.toFixed(1)}%`;
+            document.getElementById('detailGradePoints').textContent = grade.gradePoints.toFixed(1);
+            
+            // Render assignment breakdown
+            const breakdownContainer = document.getElementById('assignmentBreakdown');
+            breakdownContainer.innerHTML = '';
+            
+            grade.assignments.forEach(assignment => {
+                const assignmentElement = document.createElement('div');
+                assignmentElement.style.cssText = `
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px;
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 6px;
+                    margin-bottom: 8px;
+                `;
+                assignmentElement.innerHTML = `
+                    <div>
+                        <div style="font-weight: 500;">${assignment.name}</div>
+                        <div style="font-size: 0.85rem; color: #aaa;">Weight: ${assignment.weight}%</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: ${getPercentageColor(assignment.score)}; font-weight: 600;">${assignment.score}%</div>
+                        <div style="font-size: 0.85rem; color: #aaa;">${(assignment.score * assignment.weight / 100).toFixed(1)} pts</div>
+                    </div>
+                `;
+                breakdownContainer.appendChild(assignmentElement);
+            });
+            
+            gradeDetailsModal.style.display = 'flex';
+        }
+
+        function closeGradeDetailsModal() {
+            gradeDetailsModal.style.display = 'none';
+            selectedGradeId = null;
+        }
+
+        function showGradeCalculator() {
+            gradeCalculator.style.display = 'block';
+            // Scroll to calculator
+            gradeCalculator.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideGradeCalculator() {
+            gradeCalculator.style.display = 'none';
+        }
+
+        function calculateFinalGrade() {
+            const currentGrade = parseFloat(document.getElementById('currentGrade').value);
+            const finalWeight = parseFloat(document.getElementById('finalWeight').value);
+            const desiredGrade = parseFloat(document.getElementById('desiredGrade').value);
+            
+            if (!currentGrade || !finalWeight || !desiredGrade) {
+                showNotification('Please fill in all fields');
+                return;
+            }
+            
+            if (finalWeight >= 100) {
+                showNotification('Final exam weight must be less than 100%');
+                return;
+            }
+            
+            // Calculate needed final exam score
+            const currentWeight = 100 - finalWeight;
+            const currentContribution = currentGrade * currentWeight / 100;
+            const neededFinalScore = ((desiredGrade - currentContribution) * 100) / finalWeight;
+            
+            const resultContainer = document.getElementById('calculationResult');
+            const resultText = document.getElementById('resultText');
+            
+            resultContainer.style.display = 'block';
+            
+            if (neededFinalScore > 100) {
+                resultText.innerHTML = `
+                    To achieve a final grade of <strong>${desiredGrade}%</strong>,<br>
+                    you need <strong style="color: ${neededFinalScore > 120 ? '#ef233c' : '#f8961e'};">${neededFinalScore.toFixed(1)}%</strong> on the final exam.<br>
+                    <span style="color: #f8961e; margin-top: 10px; display: block;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        This may not be possible as it exceeds 100%
+                    </span>
+                `;
+            } else if (neededFinalScore < 0) {
+                resultText.innerHTML = `
+                    To achieve a final grade of <strong>${desiredGrade}%</strong>,<br>
+                    you only need <strong style="color: #38b000;">${Math.max(0, neededFinalScore).toFixed(1)}%</strong> on the final exam.<br>
+                    <span style="color: #38b000; margin-top: 10px; display: block;">
+                        <i class="fas fa-check-circle"></i>
+                        You're already on track to achieve your goal!
+                    </span>
+                `;
+            } else {
+                resultText.innerHTML = `
+                    To achieve a final grade of <strong>${desiredGrade}%</strong>,<br>
+                    you need <strong style="color: ${neededFinalScore > 90 ? '#38b000' : neededFinalScore > 70 ? '#4cc9f0' : '#f8961e'};">${neededFinalScore.toFixed(1)}%</strong> on the final exam.<br>
+                    <span style="color: ${neededFinalScore > 90 ? '#38b000' : neededFinalScore > 70 ? '#4cc9f0' : '#f8961e'}; margin-top: 10px; display: block;">
+                        ${neededFinalScore > 90 ? '<i class="fas fa-trophy"></i> Excellent goal!' : 
+                          neededFinalScore > 70 ? '<i class="fas fa-thumbs-up"></i> Achievable goal!' : 
+                          '<i class="fas fa-lightbulb"></i> Consider adjusting your goal'}
+                    </span>
+                `;
+            }
+        }
+
+        function initializeGpaCalculator() {
+            const gpaInputs = document.getElementById('gpaInputs');
+            gpaInputs.innerHTML = '';
+            
+            for (let i = 0; i < gpaCourses; i++) {
+                const inputRow = document.createElement('div');
+                inputRow.className = 'input-row';
+                inputRow.innerHTML = `
+                    <input type="text" class="input-field" placeholder="Course ${i + 1}" id="course${i}">
+                    <select class="input-field" id="grade${i}">
+                        <option value="4.0">A/A+ (4.0)</option>
+                        <option value="3.7">A- (3.7)</option>
+                        <option value="3.3">B+ (3.3)</option>
+                        <option value="3.0">B (3.0)</option>
+                        <option value="2.7">B- (2.7)</option>
+                        <option value="2.3">C+ (2.3)</option>
+                        <option value="2.0">C (2.0)</option>
+                        <option value="1.7">C- (1.7)</option>
+                        <option value="1.3">D+ (1.3)</option>
+                        <option value="1.0">D (1.0)</option>
+                        <option value="0.0">F (0.0)</option>
+                    </select>
+                    <input type="number" class="input-field" placeholder="Credits" id="credits${i}" min="1" max="10" value="3">
+                `;
+                gpaInputs.appendChild(inputRow);
+            }
+        }
+
+        function addGpaCourse() {
+            gpaCourses++;
+            initializeGpaCalculator();
+        }
+
+        function calculateGPA() {
+            let totalGradePoints = 0;
+            let totalCredits = 0;
+            
+            for (let i = 0; i < gpaCourses; i++) {
+                const courseName = document.getElementById(`course${i}`).value;
+                const gradeValue = parseFloat(document.getElementById(`grade${i}`).value);
+                const credits = parseFloat(document.getElementById(`credits${i}`).value);
+                
+                if (courseName && !isNaN(credits) && credits > 0) {
+                    totalGradePoints += gradeValue * credits;
+                    totalCredits += credits;
+                }
+            }
+            
+            const gpa = totalCredits > 0 ? totalGradePoints / totalCredits : 0;
+            
+            const resultContainer = document.getElementById('gpaResult');
+            const resultText = document.getElementById('gpaResultText');
+            
+            resultContainer.style.display = 'block';
+            resultText.innerHTML = `
+                <div style="font-size: 2rem; font-weight: 800; color: ${getGPAColor(gpa)}; margin-bottom: 10px;">
+                    ${gpa.toFixed(2)} GPA
+                </div>
+                <div style="color: #aaa;">
+                    Based on ${totalCredits} credit hours<br>
+                    ${getGPAMessage(gpa)}
+                </div>
+            `;
+        }
+
+        function showGoalSetting() {
+            goalSettingModal.style.display = 'flex';
+        }
+
+        function closeGoalSettingModal() {
+            goalSettingModal.style.display = 'none';
+            document.getElementById('goalSettingForm').reset();
+        }
+
+        function setupEventListeners() {
+            // Goal Setting Form
+            document.getElementById('goalSettingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                setAcademicGoals();
+            });
+        }
+
+        function setAcademicGoals() {
+            const targetGPA = document.getElementById('targetGPA').value;
+            const description = document.getElementById('goalDescription').value;
+            const targetDate = document.getElementById('goalTargetDate').value;
+            const priority = document.getElementById('goalPriority').value;
+            
+            // Get selected focus areas
+            const focusAreas = Array.from(document.querySelectorAll('input[name="focusAreas"]:checked'))
+                .map(cb => cb.value);
+            
+            closeGoalSettingModal();
+            showNotification(`Academic goals set! Target GPA: ${targetGPA}`);
+            
+            // In a real app, you would save these goals
+            console.log('Goals saved:', { targetGPA, description, targetDate, priority, focusAreas });
+        }
+
+        function exportGrades() {
+            showNotification('Generating grade report...');
+            // In a real app, this would generate and download a PDF/CSV
+            setTimeout(() => {
+                showNotification('Grade report downloaded successfully!');
+            }, 1500);
+        }
+
+        function downloadGradeReport(gradeId) {
+            if (gradeId) {
+                showNotification(`Downloading grade report for course...`);
+            } else {
+                showNotification('Downloading detailed grade report...');
+            }
+        }
+
+        function requestRegrade(gradeId) {
+            if (!gradeId) return;
+            
+            const grade = grades.find(g => g.id === gradeId);
+            if (!grade) return;
+            
+            const reason = prompt(`Request regrade for ${grade.course} (${grade.grade}):\nPlease provide reason:`);
+            if (reason && reason.trim()) {
+                showNotification('Regrade request submitted successfully!');
+            }
+        }
+
+        function viewImprovementTips() {
+            const tips = [
+                "Focus on assignments with highest weight first",
+                "Attend office hours for challenging topics",
+                "Form study groups for difficult subjects",
+                "Review graded assignments to learn from mistakes",
+                "Ask for feedback before major assignments"
+            ];
+            
+            alert(`Improvement Tips:\n\n${tips.join('\n• ')}`);
+        }
+
+        function updateStats() {
+            // This function would update additional statistics
+            // Currently handled by calculateOverallGPA()
+        }
+
+        // Helper Functions
+        function getGradeColorClass(grade) {
+            const gradeMap = {
+                'A+': 'grade-a-plus',
+                'A': 'grade-a',
+                'A-': 'grade-a',
+                'B+': 'grade-b',
+                'B': 'grade-b',
+                'B-': 'grade-b',
+                'C+': 'grade-c',
+                'C': 'grade-c',
+                'C-': 'grade-c',
+                'D+': 'grade-d',
+                'D': 'grade-d',
+                'F': 'grade-f'
+            };
+            return gradeMap[grade] || 'grade-c';
+        }
+
+        function getGradeColor(grade) {
+            const colorMap = {
+                'A+': '#38b000',
+                'A': '#4cc9f0',
+                'A-': '#4cc9f0',
+                'B+': '#ffd166',
+                'B': '#ffd166',
+                'B-': '#ffd166',
+                'C+': '#f8961e',
+                'C': '#f8961e',
+                'C-': '#f8961e',
+                'D+': '#f3722c',
+                'D': '#f3722c',
+                'F': '#ef233c'
+            };
+            return colorMap[grade] || '#f8961e';
+        }
+
+        function getGradeBarClass(grade) {
+            const gradeLetter = grade.charAt(0);
+            switch(gradeLetter) {
+                case 'A': return grade === 'A+' ? 'a-plus' : 'a';
+                case 'B': return 'b';
+                case 'C': return 'c';
+                case 'D': return 'd';
+                case 'F': return 'f';
+                default: return 'c';
+            }
+        }
+
+        function getCourseColor(course) {
+            // Assign colors based on course name
+            const colors = {
+                'Mathematics': '#4361ee',
+                'Physics': '#4cc9f0',
+                'Web Development': '#f72585',
+                'Chemistry': '#f8961e',
+                'Data Structures': '#7209b7',
+                'English': '#38b000',
+                'default': '#4361ee'
+            };
+            
+            for (const [key, color] of Object.entries(colors)) {
+                if (course.includes(key)) return color;
+            }
+            return colors.default;
+        }
+
+        function getCourseIcon(course) {
+            const icons = {
+                'Mathematics': 'fa-calculator',
+                'Physics': 'fa-atom',
+                'Web Development': 'fa-laptop-code',
+                'Chemistry': 'fa-flask',
+                'Data Structures': 'fa-project-diagram',
+                'English': 'fa-book',
+                'default': 'fa-book-open'
+            };
+            
+            for (const [key, icon] of Object.entries(icons)) {
+                if (course.includes(key)) return icon;
+            }
+            return icons.default;
+        }
+
+        function getPercentageColor(percentage) {
+            if (percentage >= 90) return '#38b000';
+            if (percentage >= 80) return '#ffd166';
+            if (percentage >= 70) return '#f8961e';
+            if (percentage >= 60) return '#f3722c';
+            return '#ef233c';
+        }
+
+        function getProgressColor(percentage) {
+            if (percentage >= 90) return 'linear-gradient(90deg, #38b000, #4cc9f0)';
+            if (percentage >= 80) return 'linear-gradient(90deg, #ffd166, #f8961e)';
+            if (percentage >= 70) return 'linear-gradient(90deg, #f8961e, #f3722c)';
+            return 'linear-gradient(90deg, #f3722c, #ef233c)';
+        }
+
+        function getGPAColor(gpa) {
+            if (gpa >= 3.7) return '#38b000';
+            if (gpa >= 3.3) return '#4cc9f0';
+            if (gpa >= 3.0) return '#ffd166';
+            if (gpa >= 2.7) return '#f8961e';
+            if (gpa >= 2.0) return '#f3722c';
+            return '#ef233c';
+        }
+
+        function getGPAMessage(gpa) {
+            if (gpa >= 3.7) return 'Excellent! Dean\'s List level';
+            if (gpa >= 3.3) return 'Great job! Strong academic performance';
+            if (gpa >= 3.0) return 'Good work! Solid academic standing';
+            if (gpa >= 2.7) return 'Satisfactory performance';
+            if (gpa >= 2.0) return 'Needs improvement';
+            return 'Academic probation - seek help';
+        }
+
+        function darkenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #3a0ca3, #4361ee);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease-out;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            `;
+            notification.innerHTML = `<i class="fas fa-check-circle"></i><span>${message}</span>`;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize GPA calculator with sample data
+        setTimeout(() => {
+            // Pre-fill GPA calculator with sample data
+            const sampleCourses = ['Calculus', 'Physics', 'Programming'];
+            const sampleGrades = ['4.0', '3.7', '4.0'];
+            
+            for (let i = 0; i < 3; i++) {
+                const courseInput = document.getElementById(`course${i}`);
+                const gradeSelect = document.getElementById(`grade${i}`);
+                const creditsInput = document.getElementById(`credits${i}`);
+                
+                if (courseInput && gradeSelect && creditsInput) {
+                    courseInput.value = sampleCourses[i] || '';
+                    gradeSelect.value = sampleGrades[i] || '4.0';
+                    creditsInput.value = '3';
+                }
+            }
+        }, 500);
+    </script>
+</body>
+</html>

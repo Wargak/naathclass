@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edulg | Online Classroom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Floating Background Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--success));
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+            background: linear-gradient(45deg, var(--accent), var(--warning));
+        }
+
+        .floating-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: -10s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(30px) rotate(240deg);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo i {
+            color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--success);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--success);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--success), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 5s infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        /* Classroom Grid */
+        .classroom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .class-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .class-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--success);
+        }
+
+        .class-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+
+        .class-card:hover::before {
+            left: 100%;
+        }
+
+        .class-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .class-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .class-teacher {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .class-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Live Class Section */
+        .live-class-container {
+            margin-top: 4rem;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #ff4757;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .video-container {
+            background: var(--glass-dark);
+            border-radius: 20px;
+            overflow: hidden;
+            height: 500px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            height: 100%;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0f3460, #16213e);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .video-placeholder i {
+            font-size: 5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .video-feed {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-height: 400px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-feed video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-label {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-feed:hover .video-controls {
+            opacity: 1;
+        }
+
+        .control-btn-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .control-btn-small:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .join-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .join-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .mute-btn {
+            background: var(--glass);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .mute-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .danger-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+        }
+
+        .danger-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        /* Participants */
+        .participants {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .participant {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass);
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .participant:hover {
+            transform: translateY(-5px);
+            background: rgba(67, 97, 238, 0.2);
+        }
+
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--success);
+        }
+
+        .participant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Webcam Permission Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        .modal p {
+            margin-bottom: 2rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .camera-preview {
+            width: 100%;
+            height: 250px;
+            background: #000;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .camera-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            margin-top: 4rem;
+            animation: slideInRight 1s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .chat-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            padding-right: 10px;
+        }
+
+        .message {
+            background: var(--glass-dark);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            max-width: 80%;
+            animation: messageAppear 0.3s ease-out;
+        }
+
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: linear-gradient(45deg, rgba(67, 97, 238, 0.3), rgba(58, 12, 163, 0.3));
+            margin-left: auto;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .message-time {
+            color: #aaa;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        .send-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            background: var(--glass-dark);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-text {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .classroom-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-container {
+                height: 400px;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-wrap: wrap;
+            }
+
+            .control-btn {
+                min-width: 140px;
+                padding: 10px 20px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Webcam Permission Modal -->
+    <div class="modal" id="cameraModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-camera"></i> Enable Webcam</h3>
+            <p>To join the live class, you need to allow access to your camera and microphone. This will enable you to participate fully in the class.</p>
+            
+            <div class="camera-preview" id="cameraPreview">
+                <!-- Camera preview will appear here -->
+            </div>
+            
+            <p style="font-size: 0.9rem; color: #4cc9f0;">
+                <i class="fas fa-shield-alt"></i> Your camera feed is only visible to you until you join the class
+            </p>
+            
+            <div class="modal-buttons">
+                <button class="control-btn danger-btn" onclick="closeCameraModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="control-btn join-btn" onclick="requestCameraAccess()">
+                    <i class="fas fa-check"></i> Allow Access
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>EDULG</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Dashboard</a></li>
+            <li><a href="class.html">Classes</a></li>
+            <li><a href="assignment.html">Assignments</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="resources.html">Resources</a></li>
+        </ul>
+        <div class="user-profile">
+            <div class="avatar" id="userAvatar">
+                <img src="./images/2.jpg" alt="Wargak" id="profileImage">
+            </div>
+            <span>Wargak Nhial</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">WELCOME <br><small style="color: #f8961e;">EDULG</small> <br> Online Classroom</h1>
+            <p class="hero-subtitle">Join live sessions, collaborate with peers, and access learning materials in our immersive virtual classroom. Experience education reimagined.</p>
+        </section>
+
+        <!-- Classroom Grid -->
+        <section class="classroom-grid">
+            <div class="class-card" onclick="joinClass('Mathematics')">
+                <div class="class-icon">
+                    <i class="fas fa-computer"></i>
+                </div>
+                <h3 class="class-title">Basic Computer</h3>
+                <p class="class-teacher">Dr. Nhial Logote</p>
+                <p>Explore calculus, linear algebra, and mathematical proofs in this advanced course.</p>
+                <div class="class-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span>45 Students</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-book"></i>
+                        <span>23 Lessons</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-card" onclick="joinClass('Mathematics')">
+                <div class="class-icon">
+                    <i class="fas fa-pen"></i>
+                </div>
+                <h3 class="class-title">Thok Naath</h3>
+                <p class="class-teacher">Changkuoth Nyak</p>
+                <p>Explore calculus, linear algebra, and mathematical proofs in this advanced course.</p>
+                <div class="class-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span>24 Students</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-book"></i>
+                        <span>12 Lessons</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-card" onclick="joinClass('Mathematics')">
+                <div class="class-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="class-title">Advance English</h3>
+                <p class="class-teacher">Dr. Sarah Johnson</p>
+                <p>Explore calculus, linear algebra, and mathematical proofs in this advanced course.</p>
+                <div class="class-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span>29 Students</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-book"></i>
+                        <span>19 Lessons</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-card" onclick="joinClass('Mathematics')">
+                <div class="class-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3 class="class-title">HTML</h3>
+                <p class="class-teacher">Dr. Sarah Johnson</p>
+                <p>Explore calculus, linear algebra, and mathematical proofs in this advanced course.</p>
+                <div class="class-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span>25 Students</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-book"></i>
+                        <span>10 Lessons</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-card" onclick="joinClass('Mathematics')">
+                <div class="class-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3 class="class-title">Advanced Mathematics</h3>
+                <p class="class-teacher">Dr. Sarah Johnson</p>
+                <p>Explore calculus, linear algebra, and mathematical proofs in this advanced course.</p>
+                <div class="class-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span>24 Students</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-book"></i>
+                        <span>12 Lessons</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-card" onclick="joinClass('Physics')">
+                <div class="class-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <h3 class="class-title">Quantum Physics</h3>
+                <p class="class-teacher">Prof. Michael Chen</p>
+                <p>Dive into the fascinating world of quantum mechanics and particle physics.</p>
+                <div class="class-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span>18 Students</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-book"></i>
+                        <span>8 Lessons</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="class-card" onclick="joinClass('Computer Science')">
+                <div class="class-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3 class="class-title">Web Development</h3>
+                <p class="class-teacher">Alex Rivera</p>
+                <p>Learn modern web development with HTML, CSS, JavaScript and frameworks.</p>
+                <div class="class-stats">
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <span>32 Students</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-book"></i>
+                        <span>15 Lessons</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Class Section -->
+        <section class="live-class-container">
+            <h2 class="section-title">
+                <span class="live-indicator"></span>
+                Live Class: Web Development
+            </h2>
+            <div class="video-container" id="videoContainer">
+                <!-- Video grid will be dynamically populated -->
+            </div>
+            <div class="controls">
+                <button class="control-btn join-btn" id="joinBtn" onclick="openCameraModal()">
+                    <i class="fas fa-video"></i>
+                    <span>Join Class with Camera</span>
+                </button>
+                <button class="control-btn mute-btn" id="muteBtn" onclick="toggleMute()">
+                    <i class="fas fa-microphone"></i>
+                    <span>Mute Audio</span>
+                </button>
+                <button class="control-btn mute-btn" id="videoToggleBtn" onclick="toggleVideo()">
+                    <i class="fas fa-video"></i>
+                    <span>Toggle Video</span>
+                </button>
+                <button class="control-btn mute-btn" onclick="shareScreen()">
+                    <i class="fas fa-desktop"></i>
+                    <span>Share Screen</span>
+                </button>
+                <button class="control-btn danger-btn" id="leaveBtn" onclick="leaveClass()" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Leave Class</span>
+                </button>
+            </div>
+
+            <!-- Participants -->
+            <div class="participants" id="participantsList">
+                <!-- Participants will be added by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Chat Section -->
+        <section class="chat-section">
+            <h2 class="section-title">
+                <i class="fas fa-comments"></i>
+                Class Chat
+            </h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be added by JavaScript -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">© 2026 Edulg Interactive Classroom. All rights reserved.</p>
+        <p class="footer-text">Designed for immersive online learning experiences</p>
+    </footer>
+
+    <script>
+        // Class Data with profile pictures
+        const participants = [
+            { 
+                name: "Wargak Nhial", 
+                initials: "WN",
+                image: "images/1.jpg"
+            },
+            { 
+                name: "Buay Gee", 
+                initials: "BY",
+                image: "images/2.jpg"
+            },
+            { 
+                name: "Chudier Deng", 
+                initials: "CD",
+                image: "images/3.jpg"
+            },
+            { 
+                name: "Logote Nhial", 
+                initials: "LG",
+                image: "images/4.jpg"
+            },
+            { 
+                name: "Riang Koang", 
+                initials: "RK",
+                image: "images/5.jpg"
+            },
+            { 
+                name: "James Chudier", 
+                initials: "CK",
+                image: "images/6.jpg"
+            }
+        ];
+
+        const sampleMessages = [
+            { sender: "Buay Gee", time: "10:30 AM", text: "Welcome everyone to today's class!" },
+            { sender: "Riang Koang", time: "10:32 AM", text: "Good morning Professor!" },
+            { sender: "James Chudier", time: "10:35 AM", text: "Could you explain the last point again?" },
+            { sender: "You", time: "10:40 AM", text: "I have a question about the homework assignment" }
+        ];
+
+        // State variables
+        let isJoined = false;
+        let isMuted = false;
+        let isVideoOn = true;
+        let localStream = null;
+        let messageCount = 0;
+        let currentUser = participants[0]; // John Student is the current user
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderParticipants();
+            renderSampleMessages();
+            showVideoPlaceholder();
+            
+            // Add animation to class cards on load
+            const cards = document.querySelectorAll('.class-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+            });
+
+            // Set profile image for user
+            document.getElementById('profileImage').src = currentUser.image;
+        });
+
+        // Show camera permission modal
+        function openCameraModal() {
+            document.getElementById('cameraModal').style.display = 'flex';
+            // Start a temporary camera preview
+            startTemporaryCamera();
+        }
+
+        // Close camera modal
+        function closeCameraModal() {
+            document.getElementById('cameraModal').style.display = 'none';
+            // Stop temporary camera stream
+            stopTemporaryCamera();
+        }
+
+        // Start temporary camera for preview
+        function startTemporaryCamera() {
+            const preview = document.getElementById('cameraPreview');
+            preview.innerHTML = '<video autoplay playsinline id="tempCamera"></video>';
+            
+            navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
+                    facingMode: "user"
+                }, 
+                audio: false 
+            })
+            .then(stream => {
+                const tempVideo = document.getElementById('tempCamera');
+                tempVideo.srcObject = stream;
+                tempVideo.play();
+                // Store the stream to stop it later
+                window.tempStream = stream;
+            })
+            .catch(err => {
+                console.error("Error accessing camera:", err);
+                document.getElementById('cameraPreview').innerHTML = 
+                    '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc;">' +
+                    '<i class="fas fa-video-slash" style="font-size: 3rem; margin-right: 1rem;"></i>' +
+                    '<div>Camera access denied or unavailable</div>' +
+                    '</div>';
+            });
+        }
+
+        // Stop temporary camera stream
+        function stopTemporaryCamera() {
+            if (window.tempStream) {
+                window.tempStream.getTracks().forEach(track => track.stop());
+                window.tempStream = null;
+            }
+        }
+
+        // Request camera access and join class
+        function requestCameraAccess() {
+            const constraints = {
+                video: { 
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: "user"
+                },
+                audio: true
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream => {
+                    localStream = stream;
+                    closeCameraModal();
+                    joinClassWithCamera();
+                })
+                .catch(err => {
+                    console.error("Error accessing media devices:", err);
+                    showNotification("Unable to access camera/microphone. Please check your permissions.");
+                    // Fallback: join without camera
+                    joinClassWithoutCamera();
+                });
+        }
+
+        // Join class with camera
+        function joinClassWithCamera() {
+            isJoined = true;
+            const joinBtn = document.getElementById('joinBtn');
+            const leaveBtn = document.getElementById('leaveBtn');
+            
+            joinBtn.style.display = 'none';
+            leaveBtn.style.display = 'flex';
+            
+            // Update video toggle button
+            const videoToggleBtn = document.getElementById('videoToggleBtn');
+            videoToggleBtn.innerHTML = '<i class="fas fa-video-slash"></i><span>Turn Off Video</span>';
+            
+            // Render video feeds
+            renderVideoFeeds();
+            
+            // Add you to participants list with camera indicator
+            renderParticipants();
+            
+            // Add join message to chat
+            addMessageToChat("System", "Wargak Nhial has joined the class with video", getCurrentTime());
+            
+            // Show notification
+            showNotification("You've joined the class with camera!");
+            
+            // Update participant count
+            updateParticipantCount();
+        }
+
+        // Join class without camera (fallback)
+        function joinClassWithoutCamera() {
+            isJoined = true;
+            const joinBtn = document.getElementById('joinBtn');
+            const leaveBtn = document.getElementById('leaveBtn');
+            
+            joinBtn.style.display = 'none';
+            leaveBtn.style.display = 'flex';
+            
+            // Update video toggle button
+            const videoToggleBtn = document.getElementById('videoToggleBtn');
+            videoToggleBtn.innerHTML = '<i class="fas fa-video"></i><span>Turn On Video</span>';
+            videoToggleBtn.disabled = true;
+            
+            // Show video placeholder with user info
+            showVideoPlaceholderWithUser();
+            
+            // Add you to participants list
+            renderParticipants();
+            
+            // Add join message to chat
+            addMessageToChat("System", "Riang Koang has joined the class", getCurrentTime());
+            
+            // Show notification
+            showNotification("You've joined the class without camera");
+            
+            // Update participant count
+            updateParticipantCount();
+        }
+
+        // Render video feeds
+        function renderVideoFeeds() {
+            const container = document.getElementById('videoContainer');
+            container.innerHTML = '';
+            
+            // Create video grid
+            const videoGrid = document.createElement('div');
+            videoGrid.className = 'video-grid';
+            
+            // Add instructor video (simulated)
+            const instructorVideo = document.createElement('div');
+            instructorVideo.className = 'video-feed';
+            instructorVideo.innerHTML = `
+                <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #0f3460, #16213e); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(45deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-chalkboard-teacher" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 style="color: white;">Wargak Nhial</h3>
+                    <p style="color: #4cc9f0;">Instructor</p>
+                </div>
+                <div class="video-label">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Wargak Nhial (Instructor)</span>
+                </div>
+            `;
+            videoGrid.appendChild(instructorVideo);
+            
+            // Add current user's camera feed
+            const userVideo = document.createElement('div');
+            userVideo.className = 'video-feed';
+            userVideo.innerHTML = `
+                <video autoplay playsinline muted id="localVideo"></video>
+                <div class="video-label">
+                    <i class="fas fa-user"></i>
+                    <span>You (Wargak Nhial)</span>
+                    ${!isVideoOn ? '<i class="fas fa-video-slash" style="margin-left: 5px;"></i>' : ''}
+                </div>
+                <div class="video-controls">
+                    <button class="control-btn-small" onclick="toggleVideo()">
+                        <i class="fas ${isVideoOn ? 'fa-video' : 'fa-video-slash'}"></i>
+                    </button>
+                    <button class="control-btn-small" onclick="toggleMute()">
+                        <i class="fas ${isMuted ? 'fa-microphone-slash' : 'fa-microphone'}"></i>
+                    </button>
+                </div>
+            `;
+            videoGrid.appendChild(userVideo);
+            
+            // Add other participants (simulated)
+            const otherParticipants = participants.slice(1, 4); // Show first 3 other participants
+            otherParticipants.forEach(participant => {
+                const participantVideo = document.createElement('div');
+                participantVideo.className = 'video-feed';
+                participantVideo.innerHTML = `
+                    <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #1a1a2e, #0f3460); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div class="participant-avatar" style="width: 100px; height: 100px; margin-bottom: 1rem;">
+                            <img src="${participant.image}" alt="${participant.name}">
+                        </div>
+                        <h3 style="color: white;">${participant.name}</h3>
+                        <p style="color: #ccc;">Student</p>
+                    </div>
+                    <div class="video-label">
+                        <i class="fas fa-user"></i>
+                        <span>${participant.name}</span>
+                    </div>
+                `;
+                videoGrid.appendChild(participantVideo);
+            });
+            
+            container.appendChild(videoGrid);
+            
+            // Set up local video stream
+            if (localStream) {
+                const localVideo = document.getElementById('localVideo');
+                localVideo.srcObject = localStream;
+                localVideo.play();
+                
+                // Apply video mute if needed
+                if (!isVideoOn) {
+                    localStream.getVideoTracks()[0].enabled = false;
+                }
+            }
+        }
+
+        // Show video placeholder
+        function showVideoPlaceholder() {
+            const container = document.getElementById('videoContainer');
+            container.innerHTML = `
+                <div class="video-placeholder">
+                    <i class="fas fa-video"></i>
+                    <h3>Live Class in Progress</h3>
+                    <p>Join the session to interact with the instructor and classmates</p>
+                </div>
+            `;
+        }
+
+        // Show video placeholder with user info
+        function showVideoPlaceholderWithUser() {
+            const container = document.getElementById('videoContainer');
+            container.innerHTML = `
+                <div class="video-placeholder">
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <div style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px;">
+                            <i class="fas fa-user"></i> ${participants.length} Participants
+                        </div>
+                        <h3 style="font-size: 2rem; margin-bottom: 1rem;">Live: Web Development Class</h3>
+                        <p style="color: #4cc9f0; font-size: 1.2rem;">Instructor: Wargak Nhial</p>
+                        <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="participant-avatar" style="width: 100px; height: 100px; margin: 0 auto 1rem;">
+                                    <img src="${participants[3].image}" alt="Alex Rivera">
+                                </div>
+                                <span>Instructor</span>
+                            </div>
+                            <div style="text-align: center;">
+                                <div class="participant-avatar" style="width: 100px; height: 100px; margin: 0 auto 1rem;">
+                                    <img src="${currentUser.image}" alt="You">
+                                </div>
+                                <span>You (Audio Only)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render participants list
+        function renderParticipants() {
+            const container = document.getElementById('participantsList');
+            container.innerHTML = '';
+            
+            participants.forEach(participant => {
+                const participantEl = document.createElement('div');
+                participantEl.className = 'participant';
+                
+                // Check if this is the current user and if they're in the class
+                const isCurrentUser = participant.name === currentUser.name;
+                const isInClass = isCurrentUser ? isJoined : true;
+                
+                participantEl.innerHTML = `
+                    <div class="participant-avatar">
+                        <img src="${participant.image}" alt="${participant.name}">
+                    </div>
+                    <span>${participant.name} ${isCurrentUser && isJoined ? '(You)' : ''}</span>
+                    ${isInClass ? '<i class="fas fa-circle" style="color: #4cc9f0; font-size: 0.7rem;"></i>' : ''}
+                `;
+                container.appendChild(participantEl);
+            });
+        }
+
+        // Render sample chat messages
+        function renderSampleMessages() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+            
+            sampleMessages.forEach(msg => {
+                addMessageToChat(msg.sender, msg.text, msg.time);
+            });
+        }
+
+        // Toggle mute function
+        function toggleMute() {
+            if (!localStream) return;
+            
+            const audioTrack = localStream.getAudioTracks()[0];
+            if (audioTrack) {
+                isMuted = !isMuted;
+                audioTrack.enabled = !isMuted;
+                
+                const muteBtn = document.getElementById('muteBtn');
+                if (isMuted) {
+                    muteBtn.innerHTML = '<i class="fas fa-microphone-slash"></i><span>Unmute Audio</span>';
+                    showNotification("Audio muted");
+                } else {
+                    muteBtn.innerHTML = '<i class="fas fa-microphone"></i><span>Mute Audio</span>';
+                    showNotification("Audio unmuted");
+                }
+                
+                // Update video controls if video is active
+                if (isJoined && localStream) {
+                    const videoControls = document.querySelector('.video-controls');
+                    if (videoControls) {
+                        const micIcon = videoControls.querySelector('.fa-microphone, .fa-microphone-slash');
+                        if (micIcon) {
+                            micIcon.className = isMuted ? 'fas fa-microphone-slash' : 'fas fa-microphone';
+                        }
+                    }
+                }
+            }
+        }
+
+        // Toggle video function
+        function toggleVideo() {
+            if (!localStream) return;
+            
+            const videoTrack = localStream.getVideoTracks()[0];
+            if (videoTrack) {
+                isVideoOn = !isVideoOn;
+                videoTrack.enabled = isVideoOn;
+                
+                const videoToggleBtn = document.getElementById('videoToggleBtn');
+                if (isVideoOn) {
+                    videoToggleBtn.innerHTML = '<i class="fas fa-video-slash"></i><span>Turn Off Video</span>';
+                    showNotification("Video turned on");
+                } else {
+                    videoToggleBtn.innerHTML = '<i class="fas fa-video"></i><span>Turn On Video</span>';
+                    showNotification("Video turned off");
+                }
+                
+                // Update video label and controls if video is active
+                if (isJoined) {
+                    const videoLabel = document.querySelector('.video-label span');
+                    if (videoLabel && videoLabel.textContent.includes('You')) {
+                        const videoIcon = document.querySelector('.video-label .fa-video-slash');
+                        if (videoIcon) {
+                            videoIcon.style.display = isVideoOn ? 'none' : 'inline-block';
+                        }
+                    }
+                    
+                    const videoControls = document.querySelector('.video-controls');
+                    if (videoControls) {
+                        const videoIcon = videoControls.querySelector('.fa-video, .fa-video-slash');
+                        if (videoIcon) {
+                            videoIcon.className = isVideoOn ? 'fas fa-video' : 'fas fa-video-slash';
+                        }
+                    }
+                }
+            }
+        }
+
+        // Share screen function
+        function shareScreen() {
+            if (!isJoined) {
+                showNotification("Please join the class first");
+                return;
+            }
+            
+            showNotification("Screen sharing started");
+            addMessageToChat("System", "Wargak is now sharing their screen", getCurrentTime());
+            
+            // In a real app, you would implement screen sharing here
+            // navigator.mediaDevices.getDisplayMedia({ video: true })
+            //   .then(stream => {
+            //     // Handle screen sharing stream
+            //   });
+        }
+
+        // Leave class function
+        function leaveClass() {
+            isJoined = false;
+            const joinBtn = document.getElementById('joinBtn');
+            const leaveBtn = document.getElementById('leaveBtn');
+            
+            joinBtn.style.display = 'flex';
+            leaveBtn.style.display = 'none';
+            
+            // Stop local stream
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+            
+            // Reset UI
+            showVideoPlaceholder();
+            renderParticipants();
+            
+            // Reset buttons
+            const videoToggleBtn = document.getElementById('videoToggleBtn');
+            videoToggleBtn.innerHTML = '<i class="fas fa-video"></i><span>Toggle Video</span>';
+            videoToggleBtn.disabled = false;
+            
+            const muteBtn = document.getElementById('muteBtn');
+            muteBtn.innerHTML = '<i class="fas fa-microphone"></i><span>Mute Audio</span>';
+            isMuted = false;
+            
+            // Add leave message to chat
+            addMessageToChat("System", "Wargak  has left the class", getCurrentTime());
+            
+            // Show notification
+            showNotification("You've left the class");
+            
+            // Update participant count
+            updateParticipantCount();
+        }
+
+        // Update participant count
+        function updateParticipantCount() {
+            const count = isJoined ? participants.length : participants.length - 1;
+            const countElement = document.querySelector('.video-placeholder') || 
+                                document.querySelector('.video-grid');
+            
+            if (countElement && countElement.querySelector('.fa-user')) {
+                const countText = countElement.querySelector('.fa-user').parentNode;
+                if (countText) {
+                    countText.innerHTML = `<i class="fas fa-user"></i> ${count} Participants`;
+                }
+            }
+        }
+
+        // Send chat message
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessageToChat("You", message, getCurrentTime());
+                input.value = '';
+                
+                // Simulate a response after 1-3 seconds
+                setTimeout(() => {
+                    const responses = [
+                        "Thanks for your question!",
+                        "Great point!",
+                        "Let me clarify that...",
+                        "Does anyone else have thoughts on this?",
+                        "I'll cover that in the next slide"
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessageToChat("Wargak Nhial (Instructor)", randomResponse, getCurrentTime());
+                }, 1000 + Math.random() * 2000);
+            }
+        }
+
+        // Handle Enter key in chat
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Add message to chat
+        function addMessageToChat(sender, text, time) {
+            const container = document.getElementById('chatMessages');
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${sender === 'You' ? 'user' : ''}`;
+            messageEl.innerHTML = `
+                <div class="message-header">
+                    <span class="message-sender">${sender}</span>
+                    <span class="message-time">${time}</span>
+                </div>
+                <div class="message-text">${text}</div>
+            `;
+            container.appendChild(messageEl);
+            
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+            
+            // Animation
+            messageEl.style.animation = 'messageAppear 0.3s ease-out';
+            
+            // Increment message count for demo
+            messageCount++;
+        }
+
+        // Get current time in HH:MM format
+        function getCurrentTime() {
+            const now = new Date();
+            return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+
+        // Show notification
+        function showNotification(text) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #3a0ca3, #4361ee);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease-out;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            `;
+            notification.innerHTML = `<i class="fas fa-info-circle"></i><span>${text}</span>`;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Join class from card click
+        function joinClass(className) {
+            showNotification(`Opening ${className} class`);
+            
+            // Simulate loading
+            setTimeout(() => {
+                // In a real app, this would navigate to the class page
+                alert(`Welcome to ${className}! This would open the full class interface in a real application.`);
+            }, 500);
+        }
+
+        // Add some interactive effects
+        document.querySelectorAll('.class-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Handle profile picture click
+        document.getElementById('userAvatar').addEventListener('click', function() {
+            showNotification("Profile: John Student | Computer Science Major");
+        });
+
+        // Camera permission reminder
+        window.addEventListener('beforeunload', function() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>

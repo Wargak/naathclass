@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edulg | Class Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Floating Background Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--success));
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+            background: linear-gradient(45deg, var(--accent), var(--warning));
+        }
+
+        .floating-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: -10s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(30px) rotate(240deg);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo i {
+            color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--success);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--success);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--success), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 5s infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Class Grid */
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .class-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .class-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--success);
+        }
+
+        .class-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+
+        .class-card:hover::before {
+            left: 100%;
+        }
+
+        .class-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .class-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .class-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .class-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .class-teacher {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .class-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .class-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .class-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .class-schedule {
+            color: var(--warning);
+            font-size: 0.9rem;
+        }
+
+        /* Class Details Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: white;
+        }
+
+        .tab.active {
+            color: var(--success);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--success);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Materials Grid */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .material-card {
+            background: var(--glass-dark);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .material-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .material-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .material-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .material-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        /* Assignments */
+        .assignments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .assignment-item {
+            background: var(--glass-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .assignment-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .assignment-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .assignment-info p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .assignment-due {
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .assignment-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(248, 150, 30, 0.1);
+            color: var(--warning);
+        }
+
+        .status-submitted {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        /* Students List */
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .student-card {
+            background: var(--glass-dark);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            border: 1px solid var(--success);
+        }
+
+        .student-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--success);
+        }
+
+        .student-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .student-name {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .student-role {
+            color: var(--success);
+            font-size: 0.85rem;
+            background: rgba(76, 201, 240, 0.1);
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Create Class Modal */
+        .create-class-modal {
+            max-width: 600px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* Calendar */
+        .calendar {
+            background: var(--glass-dark);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .calendar-day.today {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.has-event {
+            border: 2px solid var(--success);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #aaa;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .class-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .modal-content {
+                max-width: 95%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .class-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+            <i class="fas fa-graduation-cap"></i>
+            </a>
+            <span>EDULG</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="class.html" class="active">Classes</a></li>
+            <li><a href="assignment.html">Assignments</a></li>
+            <li><a href="schedule.html" class="active">Schedule</a></li>
+            <li><a href="gardes.html">Grades</a></li>
+            <li><a href="resources.html">Resources</a></li>
+        </ul>
+        <div class="user-profile">
+            <div class="avatar">
+                <a href="admin.html">
+                <img src="images/1.jpg" alt="Wargak">
+                </a>
+            </div>
+            <span>Wargak Nhial</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">My Classes</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="showCalendar()">
+                    <i class="fas fa-calendar-alt"></i>
+                    View Calendar
+                </button>
+                <button class="btn btn-primary" onclick="showCreateClassModal()">
+                    <i class="fas fa-plus"></i>
+                    Create Class
+                </button>
+            </div>
+        </div>
+
+        <!-- Classes Grid -->
+        <div class="class-grid" id="classesGrid">
+            <!-- Classes will be populated by JavaScript -->
+        </div>
+
+        <!-- No Classes State -->
+        <div class="empty-state" id="noClassesState" style="display: none;">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <h3>No Classes Yet</h3>
+            <p>Create your first class or wait to be enrolled in existing classes.</p>
+            <button class="btn btn-primary" onclick="showCreateClassModal()" style="margin-top: 1.5rem;">
+                <i class="fas fa-plus"></i>
+                Create Your First Class
+            </button>
+        </div>
+    </div>
+
+    <!-- Class Details Modal -->
+    <div class="modal" id="classDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="className">
+                    <i class="fas fa-chalkboard"></i>
+                    <span>Class Name</span>
+                </h2>
+                <button class="close-modal" onclick="closeClassDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('overview')">Overview</button>
+                    <button class="tab" onclick="switchTab('materials')">Materials</button>
+                    <button class="tab" onclick="switchTab('assignments')">Assignments</button>
+                    <button class="tab" onclick="switchTab('students')">Students</button>
+                    <button class="tab" onclick="switchTab('discussion')">Discussion</button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div id="overviewTab" class="tab-content active">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Class Description</label>
+                            <div class="form-input" style="background: var(--glass-dark);">
+                                <p id="classDescription">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Class Schedule</label>
+                            <div class="form-input" style="background: var(--glass-dark);">
+                                <p><strong>Days:</strong> <span id="classDays">Mon, Wed, Fri</span></p>
+                                <p><strong>Time:</strong> <span id="classTime">10:00 AM - 11:30 AM</span></p>
+                                <p><strong>Next Session:</strong> <span id="nextSession">Tomorrow, 10:00 AM</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Recent Announcements</label>
+                        <div class="assignments-list">
+                            <div class="assignment-item">
+                                <div class="assignment-info">
+                                    <h4>Welcome to Class!</h4>
+                                    <p>Welcome everyone to our first session. Please review the syllabus before our first meeting.</p>
+                                </div>
+                                <div class="assignment-meta">
+                                    <span class="assignment-due">Posted 2 days ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="materialsTab" class="tab-content">
+                    <div class="materials-grid" id="materialsGrid">
+                        <!-- Materials will be populated by JavaScript -->
+                    </div>
+                    <button class="btn btn-secondary" onclick="addMaterial()" style="margin-top: 1.5rem;">
+                        <i class="fas fa-plus"></i>
+                        Add Material
+                    </button>
+                </div>
+
+                <div id="assignmentsTab" class="tab-content">
+                    <div class="assignments-list" id="assignmentsList">
+                        <!-- Assignments will be populated by JavaScript -->
+                    </div>
+                    <button class="btn btn-secondary" onclick="addAssignment()" style="margin-top: 1.5rem;">
+                        <i class="fas fa-plus"></i>
+                        Create Assignment
+                    </button>
+                </div>
+
+                <div id="studentsTab" class="tab-content">
+                    <div class="students-grid" id="studentsGrid">
+                        <!-- Students will be populated by JavaScript -->
+                    </div>
+                    <button class="btn btn-secondary" onclick="inviteStudent()" style="margin-top: 1.5rem;">
+                        <i class="fas fa-user-plus"></i>
+                        Invite Student
+                    </button>
+                </div>
+
+                <div id="discussionTab" class="tab-content">
+                    <div class="empty-state" style="padding: 2rem;">
+                        <i class="fas fa-comments"></i>
+                        <h3>Class Discussion</h3>
+                        <p>Start a discussion with your classmates and teacher.</p>
+                        <div style="margin-top: 1.5rem; background: var(--glass-dark); padding: 1.5rem; border-radius: 10px;">
+                            <textarea class="form-textarea" placeholder="Type your message here..." rows="3"></textarea>
+                            <div class="modal-actions" style="margin-top: 1rem;">
+                                <button class="btn btn-primary">Post Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Class Modal -->
+    <div class="modal" id="createClassModal">
+        <div class="modal-content create-class-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-plus-circle"></i>
+                    Create New Class
+                </h2>
+                <button class="close-modal" onclick="closeCreateClassModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createClassForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Class Name *</label>
+                            <input type="text" class="form-input" id="newClassName" placeholder="e.g., Advanced Mathematics" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Subject *</label>
+                            <select class="form-select" id="newClassSubject" required>
+                                <option value="">Select Subject</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="physics">Physics</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="biology">Biology</option>
+                                <option value="computer-science">Computer Science</option>
+                                <option value="english">English</option>
+                                <option value="history">History</option>
+                                <option value="art">Art</option>
+                                <option value="music">Music</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" id="newClassDescription" placeholder="Describe what students will learn in this class..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Schedule Days *</label>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" name="days" value="mon"> Mon
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" name="days" value="tue"> Tue
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" name="days" value="wed"> Wed
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" name="days" value="thu"> Thu
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" name="days" value="fri"> Fri
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" name="days" value="sat"> Sat
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px;">
+                                    <input type="checkbox" name="days" value="sun"> Sun
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Time *</label>
+                            <input type="time" class="form-input" id="newClassTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Duration (hours) *</label>
+                            <input type="number" class="form-input" id="newClassDuration" min="0.5" max="4" step="0.5" value="1.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Maximum Students</label>
+                            <input type="number" class="form-input" id="newClassMaxStudents" min="1" max="100" value="30">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Class Color</label>
+                        <div style="display: flex; gap: 10px;">
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="color" value="#4361ee" checked>
+                                <span style="width: 20px; height: 20px; background: #4361ee; border-radius: 4px;"></span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="color" value="#4cc9f0">
+                                <span style="width: 20px; height: 20px; background: #4cc9f0; border-radius: 4px;"></span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="color" value="#f72585">
+                                <span style="width: 20px; height: 20px; background: #f72585; border-radius: 4px;"></span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px;">
+                                <input type="radio" name="color" value="#f8961e">
+                                <span style="width: 20px; height: 20px; background: #f8961e; border-radius: 4px;"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateClassModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i>
+                            Create Class
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Modal -->
+    <div class="modal" id="calendarModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Class Schedule
+                </h2>
+                <button class="close-modal" onclick="closeCalendarModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <h3 id="currentMonth">June 2023</h3>
+                        <div class="calendar-nav">
+                            <button class="action-btn" onclick="prevMonth()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="action-btn" onclick="nextMonth()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <h4>Today's Classes</h4>
+                    <div class="assignments-list" id="todayClasses">
+                        <!-- Today's classes will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Class Data
+        let classes = [
+            {
+                id: 1,
+                name: "Advanced Mathematics",
+                subject: "mathematics",
+                description: "Explore calculus, linear algebra, and mathematical proofs in this advanced course. Perfect for students who want to deepen their mathematical understanding.",
+                teacher: "Dr. Sarah Johnson",
+                teacherAvatar: "images/2.jpg",
+                icon: "fa-calculator",
+                color: "#4361ee",
+                students: 24,
+                lessons: 12,
+                schedule: "Mon, Wed, Fri | 10:00 AM",
+                materials: 8,
+                assignments: 5,
+                isTeacher: false
+            },
+            {
+                id: 2,
+                name: "Quantum Physics",
+                subject: "physics",
+                description: "Dive into the fascinating world of quantum mechanics and particle physics. Understand the fundamental principles that govern our universe.",
+                teacher: "Prof. Michael Chen",
+                teacherAvatar: "images/3.jpg",
+                icon: "fa-atom",
+                color: "#4cc9f0",
+                students: 18,
+                lessons: 8,
+                schedule: "Tue, Thu | 2:00 PM",
+                materials: 6,
+                assignments: 3,
+                isTeacher: false
+            },
+            {
+                id: 3,
+                name: "Web Development",
+                subject: "computer-science",
+                description: "Learn modern web development with HTML, CSS, JavaScript and frameworks. Build real-world projects and deploy them online.",
+                teacher: "Alex Rivera",
+                teacherAvatar: "images/4.jpg",
+                icon: "fa-laptop-code",
+                color: "#f72585",
+                students: 32,
+                lessons: 15,
+                schedule: "Mon, Wed, Fri | 1:00 PM",
+                materials: 12,
+                assignments: 7,
+                isTeacher: true
+            },
+            {
+                id: 4,
+                name: "Organic Chemistry",
+                subject: "chemistry",
+                description: "Study the structure, properties, and reactions of organic compounds. Essential for pre-med and chemistry majors.",
+                teacher: "Dr. Emily Wilson",
+                teacherAvatar: "images/5.jpg",
+                icon: "fa-flask",
+                color: "#f8961e",
+                students: 22,
+                lessons: 10,
+                schedule: "Tue, Thu | 9:00 AM",
+                materials: 9,
+                assignments: 4,
+                isTeacher: false
+            }
+        ];
+
+        // Materials Data
+        const materialsData = [
+            { id: 1, classId: 1, title: "Calculus Textbook", type: "pdf", size: "2.4 MB", uploaded: "2 days ago" },
+            { id: 2, classId: 1, title: "Linear Algebra Notes", type: "doc", size: "1.8 MB", uploaded: "1 week ago" },
+            { id: 3, classId: 1, title: "Problem Set 1", type: "pdf", size: "3.2 MB", uploaded: "3 days ago" },
+            { id: 4, classId: 2, title: "Quantum Mechanics Slides", type: "ppt", size: "4.1 MB", uploaded: "2 days ago" },
+            { id: 5, classId: 3, title: "HTML & CSS Guide", type: "pdf", size: "5.2 MB", uploaded: "1 week ago" },
+            { id: 6, classId: 3, title: "JavaScript Exercises", type: "zip", size: "8.7 MB", uploaded: "3 days ago" }
+        ];
+
+        // Assignments Data
+        const assignmentsData = [
+            { id: 1, classId: 1, title: "Calculus Problem Set", due: "2023-06-15", status: "pending", points: 100 },
+            { id: 2, classId: 1, title: "Midterm Exam", due: "2023-06-20", status: "pending", points: 200 },
+            { id: 3, classId: 2, title: "Quantum Theory Essay", due: "2023-06-18", status: "submitted", points: 150 },
+            { id: 4, classId: 3, title: "Web Portfolio Project", due: "2023-06-25", status: "pending", points: 300 },
+            { id: 5, classId: 3, title: "JavaScript Quiz", due: "2023-06-12", status: "submitted", points: 50 }
+        ];
+
+        // Students Data
+        const studentsData = [
+            { id: 1, name: "Wargak Nhial", email: "Wwrgaknhial@edulg.com", role: "student", avatar: "images/1.jpg" },
+            { id: 2, name: "Buay Gee", email: "buaygee@edulg.com", role: "student", avatar: "images/2.jpg" },
+            { id: 3, name: "Chudier Deng", email: "chudierdeng@edulg.com", role: "student", avatar: "images/3.jpg" },
+            { id: 4, name: "Logote Nhial", email: "logotenhial@edulg.com", role: "student", avatar: "images/4.jpg" },
+            { id: 5, name: "Riang Koang", email: "riangkoang@edulg.com", role: "student", avatar: "images/5.jpg" }
+        ];
+
+        // Current State
+        let currentClassId = null;
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // DOM Elements
+        const classesGrid = document.getElementById('classesGrid');
+        const noClassesState = document.getElementById('noClassesState');
+        const classDetailsModal = document.getElementById('classDetailsModal');
+        const createClassModal = document.getElementById('createClassModal');
+        const calendarModal = document.getElementById('calendarModal');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderClasses();
+            setupEventListeners();
+        });
+
+        function renderClasses() {
+            if (classes.length === 0) {
+                classesGrid.style.display = 'none';
+                noClassesState.style.display = 'block';
+                return;
+            }
+
+            classesGrid.innerHTML = '';
+            classesGrid.style.display = 'grid';
+            noClassesState.style.display = 'none';
+
+            classes.forEach(cls => {
+                const classCard = document.createElement('div');
+                classCard.className = 'class-card';
+                classCard.style.borderLeft = `5px solid ${cls.color}`;
+                classCard.onclick = () => openClassDetails(cls.id);
+                
+                classCard.innerHTML = `
+                    <div class="class-header">
+                        <div class="class-icon" style="background: linear-gradient(45deg, ${cls.color}, ${darkenColor(cls.color, 20)})">
+                            <i class="fas ${cls.icon}"></i>
+                        </div>
+                        <div class="class-actions">
+                            <button class="action-btn" onclick="event.stopPropagation(); editClass(${cls.id})" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="event.stopPropagation(); deleteClass(${cls.id})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="class-title">${cls.name}</h3>
+                    <div class="class-teacher">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>${cls.teacher}</span>
+                        ${cls.isTeacher ? '<span style="background: rgba(76, 201, 240, 0.1); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">(You)</span>' : ''}
+                    </div>
+                    <p class="class-description">${cls.description.substring(0, 120)}${cls.description.length > 120 ? '...' : ''}</p>
+                    <div class="class-footer">
+                        <div class="class-stats">
+                            <div class="stat">
+                                <i class="fas fa-users"></i>
+                                <span>${cls.students} Students</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-book"></i>
+                                <span>${cls.lessons} Lessons</span>
+                            </div>
+                        </div>
+                        <div class="class-schedule">
+                            <i class="fas fa-clock"></i>
+                            <span>${cls.schedule}</span>
+                        </div>
+                    </div>
+                `;
+                
+                classesGrid.appendChild(classCard);
+            });
+        }
+
+        function setupEventListeners() {
+            // Create Class Form
+            document.getElementById('createClassForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createNewClass();
+            });
+        }
+
+        function openClassDetails(classId) {
+            currentClassId = classId;
+            const cls = classes.find(c => c.id === classId);
+            
+            if (!cls) return;
+            
+            // Update modal title
+            document.getElementById('className').innerHTML = `
+                <i class="fas ${cls.icon}"></i>
+                <span>${cls.name}</span>
+            `;
+            
+            // Update overview
+            document.getElementById('classDescription').textContent = cls.description;
+            document.getElementById('classDays').textContent = cls.schedule.split(' | ')[0];
+            document.getElementById('classTime').textContent = cls.schedule.split(' | ')[1];
+            
+            // Set next session (simulated)
+            const nextSession = new Date();
+            nextSession.setDate(nextSession.getDate() + 1);
+            document.getElementById('nextSession').textContent = `Tomorrow, ${cls.schedule.split(' | ')[1]}`;
+            
+            // Render materials
+            renderMaterials(classId);
+            
+            // Render assignments
+            renderAssignments(classId);
+            
+            // Render students
+            renderStudents(classId);
+            
+            // Show modal
+            classDetailsModal.style.display = 'flex';
+            switchTab('overview');
+        }
+
+        function closeClassDetailsModal() {
+            classDetailsModal.style.display = 'none';
+            currentClassId = null;
+        }
+
+        function switchTab(tabName) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.tab[onclick*="${tabName}"]`).classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}Tab`).classList.add('active');
+        }
+
+        function renderMaterials(classId) {
+            const materials = materialsData.filter(m => m.classId === classId);
+            const container = document.getElementById('materialsGrid');
+            
+            if (materials.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1; padding: 2rem;">
+                        <i class="fas fa-folder-open"></i>
+                        <h3>No Materials Yet</h3>
+                        <p>Add learning materials for your students.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            materials.forEach(material => {
+                const icon = getFileIcon(material.type);
+                const card = document.createElement('div');
+                card.className = 'material-card';
+                card.innerHTML = `
+                    <div class="material-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <h4 class="material-title">${material.title}</h4>
+                    <div class="material-meta">
+                        <span>${material.type.toUpperCase()}</span>
+                        <span>${material.uploaded}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderAssignments(classId) {
+            const assignments = assignmentsData.filter(a => a.classId === classId);
+            const container = document.getElementById('assignmentsList');
+            
+            if (assignments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="padding: 2rem;">
+                        <i class="fas fa-tasks"></i>
+                        <h3>No Assignments Yet</h3>
+                        <p>Create assignments for your students.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            assignments.forEach(assignment => {
+                const dueDate = new Date(assignment.due);
+                const now = new Date();
+                const daysLeft = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
+                
+                const item = document.createElement('div');
+                item.className = 'assignment-item';
+                item.innerHTML = `
+                    <div class="assignment-info">
+                        <h4>${assignment.title}</h4>
+                        <p>Due: ${dueDate.toDateString()} • ${assignment.points} points</p>
+                    </div>
+                    <div>
+                        <span class="assignment-due">${daysLeft} days left</span>
+                        <span class="assignment-status status-${assignment.status}">${assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}</span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function renderStudents(classId) {
+            const container = document.getElementById('studentsGrid');
+            container.innerHTML = '';
+            
+            studentsData.forEach(student => {
+                const card = document.createElement('div');
+                card.className = 'student-card';
+                card.innerHTML = `
+                    <div class="student-avatar">
+                        <img src="${student.avatar}" alt="${student.name}">
+                    </div>
+                    <h4 class="student-name">${student.name}</h4>
+                    <span class="student-role">${student.role}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function showCreateClassModal() {
+            createClassModal.style.display = 'flex';
+        }
+
+        function closeCreateClassModal() {
+            createClassModal.style.display = 'none';
+            document.getElementById('createClassForm').reset();
+        }
+
+        function createNewClass() {
+            const name = document.getElementById('newClassName').value;
+            const subject = document.getElementById('newClassSubject').value;
+            const description = document.getElementById('newClassDescription').value;
+            const time = document.getElementById('newClassTime').value;
+            const duration = document.getElementById('newClassDuration').value;
+            
+            // Get selected days
+            const days = Array.from(document.querySelectorAll('input[name="days"]:checked'))
+                .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1, 3))
+                .join(', ');
+            
+            // Get selected color
+            const color = document.querySelector('input[name="color"]:checked').value;
+            
+            const newClass = {
+                id: classes.length + 1,
+                name: name,
+                subject: subject,
+                description: description,
+                teacher: "You (Teacher)",
+                teacherAvatar: "images/1.jpg",
+                icon: getSubjectIcon(subject),
+                color: color,
+                students: 0,
+                lessons: 0,
+                schedule: `${days} | ${formatTime(time)}`,
+                materials: 0,
+                assignments: 0,
+                isTeacher: true
+            };
+            
+            classes.unshift(newClass);
+            renderClasses();
+            closeCreateClassModal();
+            showNotification('Class created successfully!');
+            
+            // Auto-open the new class
+            setTimeout(() => openClassDetails(newClass.id), 500);
+        }
+
+        function editClass(classId) {
+            const cls = classes.find(c => c.id === classId);
+            if (!cls) return;
+            
+            if (confirm(`Edit "${cls.name}"?`)) {
+                // In a real app, open edit form
+                const newName = prompt('Enter new class name:', cls.name);
+                if (newName && newName.trim()) {
+                    cls.name = newName.trim();
+                    renderClasses();
+                    showNotification('Class updated successfully!');
+                }
+            }
+        }
+
+        function deleteClass(classId) {
+            const cls = classes.find(c => c.id === classId);
+            if (!cls) return;
+            
+            if (confirm(`Are you sure you want to delete "${cls.name}"?`)) {
+                classes = classes.filter(c => c.id !== classId);
+                renderClasses();
+                showNotification('Class deleted successfully!');
+            }
+        }
+
+        function addMaterial() {
+            if (!currentClassId) return;
+            
+            const materialName = prompt('Enter material name:');
+            if (materialName && materialName.trim()) {
+                showNotification(`Material "${materialName}" added successfully!`);
+                // In a real app, you would upload the file
+                setTimeout(() => renderMaterials(currentClassId), 500);
+            }
+        }
+
+        function addAssignment() {
+            if (!currentClassId) return;
+            
+            const assignmentName = prompt('Enter assignment name:');
+            if (assignmentName && assignmentName.trim()) {
+                showNotification(`Assignment "${assignmentName}" created successfully!`);
+                // In a real app, you would open an assignment creation form
+                setTimeout(() => renderAssignments(currentClassId), 500);
+            }
+        }
+
+        function inviteStudent() {
+            const email = prompt('Enter student email address:');
+            if (email && email.trim()) {
+                showNotification(`Invitation sent to ${email}`);
+            }
+        }
+
+        function showCalendar() {
+            renderCalendar();
+            calendarModal.style.display = 'flex';
+        }
+
+        function closeCalendarModal() {
+            calendarModal.style.display = 'none';
+        }
+
+        function renderCalendar() {
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            
+            document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+            
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+            
+            // Day headers
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.style.fontWeight = '600';
+                dayHeader.style.color = '#aaa';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
+            
+            // Empty cells for days before the first day of the month
+            for (let i = 0; i < startingDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day';
+                calendarGrid.appendChild(emptyCell);
+            }
+            
+            // Days of the month
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                
+                // Check if today
+                if (day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    dayCell.classList.add('today');
+                }
+                
+                // Check if has classes (simulated - every Monday, Wednesday, Friday)
+                const date = new Date(currentYear, currentMonth, day);
+                if ([1, 3, 5].includes(date.getDay())) {
+                    dayCell.classList.add('has-event');
+                }
+                
+                calendarGrid.appendChild(dayCell);
+            }
+            
+            // Render today's classes
+            renderTodayClasses();
+        }
+
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        function renderTodayClasses() {
+            const container = document.getElementById('todayClasses');
+            const todayClasses = classes.slice(0, 2); // Show first 2 classes as today's classes
+            
+            if (todayClasses.length === 0) {
+                container.innerHTML = '<p style="color: #aaa; text-align: center;">No classes scheduled for today.</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            todayClasses.forEach(cls => {
+                const item = document.createElement('div');
+                item.className = 'assignment-item';
+                item.innerHTML = `
+                    <div class="assignment-info">
+                        <h4>${cls.name}</h4>
+                        <p>${cls.teacher} • ${cls.schedule}</p>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 8px 15px;" onclick="openClassDetails(${cls.id}); closeCalendarModal();">
+                        Join
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Helper Functions
+        function getFileIcon(type) {
+            const icons = {
+                pdf: 'fa-file-pdf',
+                doc: 'fa-file-word',
+                ppt: 'fa-file-powerpoint',
+                zip: 'fa-file-archive',
+                default: 'fa-file'
+            };
+            return icons[type] || icons.default;
+        }
+
+        function getSubjectIcon(subject) {
+            const icons = {
+                mathematics: 'fa-calculator',
+                physics: 'fa-atom',
+                chemistry: 'fa-flask',
+                biology: 'fa-dna',
+                'computer-science': 'fa-laptop-code',
+                english: 'fa-book',
+                history: 'fa-landmark',
+                art: 'fa-palette',
+                music: 'fa-music',
+                default: 'fa-book-open'
+            };
+            return icons[subject] || icons.default;
+        }
+
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        function darkenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #3a0ca3, #4361ee);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease-out;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            `;
+            notification.innerHTML = `<i class="fas fa-check-circle"></i><span>${message}</span>`;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize calendar
+        renderCalendar();
+    </script>
+</body>
+</html>

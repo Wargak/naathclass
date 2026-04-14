@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edulg | Learning Resources</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Floating Background Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--success));
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+            background: linear-gradient(45deg, var(--accent), var(--warning));
+        }
+
+        .floating-element:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: -10s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            33% {
+                transform: translateY(-30px) rotate(120deg);
+            }
+            66% {
+                transform: translateY(30px) rotate(240deg);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo i {
+            color: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--success);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--success);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--success), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 5s infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--success), #38b000);
+            color: white;
+        }
+
+        /* Quick Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--success);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Resource Types Grid */
+        .resource-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .type-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .type-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--success);
+        }
+
+        .type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+
+        .type-card:hover::before {
+            left: 100%;
+        }
+
+        .type-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .type-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .type-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .type-count {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Resources Grid */
+        .resources-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .resources-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resources-title {
+            font-size: 1.3rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            min-width: 150px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            min-width: 250px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .resource-card {
+            background: var(--glass-dark);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--success);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .resource-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .resource-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .resource-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .resource-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .resource-info {
+            display: flex;
+            gap: 1rem;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .resource-size {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .resource-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .resource-class {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Recent Activity */
+        .activity-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .activity-title {
+            font-size: 1.3rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--glass-dark);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .activity-content h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .activity-content p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .activity-time {
+            margin-left: auto;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        /* Study Tools */
+        .tools-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tool-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--success);
+        }
+
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .tool-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .tool-description {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalAppear 0.3s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .file-upload i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .file-list {
+            margin-top: 1.5rem;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(67, 97, 238, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        /* Preview Section */
+        .preview-section {
+            background: var(--glass-dark);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-title {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #aaa;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .resource-types {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .resources-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+            }
+
+            .search-box, .filter-select {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .tools-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+            <i class="fas fa-graduation-cap"></i>
+            </a>
+            <span>EDULG</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="class.html">Classes</a></li>
+            <li><a href="assignment.html">Assignments</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="resources.html" class="active">Resources</a></li>
+        </ul>
+        <div class="user-profile">
+            <div class="avatar">
+                <a href="admin.html">
+                <img src="images/1.jpg" alt="Wargak Nhial">
+                </a>
+            </div>
+            <span>Wargak Nhial</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Learning Resources</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="showSharedResources()">
+                    <i class="fas fa-share-alt"></i>
+                    Shared Resources
+                </button>
+                <button class="btn btn-primary" onclick="showUploadModal()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Upload Resource
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-change" style="color: var(--success);">
+                        <i class="fas fa-arrow-up"></i>
+                        12 new this week
+                    </div>
+                </div>
+                <div class="stat-value" id="totalResources">148</div>
+                <div class="stat-label">Total Resources</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-folder"></i>
+                    </div>
+                    <div class="stat-change" style="color: var(--primary);">
+                        4.2 GB used
+                    </div>
+                </div>
+                <div class="stat-value" id="storageUsed">8.5 GB</div>
+                <div class="stat-label">Storage Used (of 15 GB)</div>
+                <div class="progress-bar" style="margin-top: 1rem;">
+                    <div class="progress-fill" style="width: 56.7%; background: linear-gradient(90deg, var(--primary), var(--success));"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="stat-change" style="color: var(--warning);">
+                        <i class="fas fa-trend-up"></i>
+                        28 downloads today
+                    </div>
+                </div>
+                <div class="stat-value" id="totalDownloads">2,847</div>
+                <div class="stat-label">Total Downloads</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-change" style="color: var(--success);">
+                        Active community
+                    </div>
+                </div>
+                <div class="stat-value" id="sharedResources">63</div>
+                <div class="stat-label">Shared Resources</div>
+            </div>
+        </div>
+
+        <!-- Resource Types -->
+        <div class="resource-types">
+            <div class="type-card" onclick="filterByType('lecture-notes')">
+                <div class="type-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="type-title">Lecture Notes</h3>
+                <p class="type-description">Comprehensive notes from all your classes, organized by topic and date.</p>
+                <div class="type-count">42 files</div>
+            </div>
+
+            <div class="type-card" onclick="filterByType('assignments')">
+                <div class="type-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3 class="type-title">Assignments</h3>
+                <p class="type-description">Past assignments, solutions, and problem sets for practice and review.</p>
+                <div class="type-count">28 files</div>
+            </div>
+
+            <div class="type-card" onclick="filterByType('textbooks')">
+                <div class="type-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="type-title">Textbooks & eBooks</h3>
+                <p class="type-description">Digital textbooks, reference materials, and supplementary readings.</p>
+                <div class="type-count">15 files</div>
+            </div>
+
+            <div class="type-card" onclick="filterByType('videos')">
+                <div class="type-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3 class="type-title">Video Lectures</h3>
+                <p class="type-description">Recorded lectures, tutorials, and educational videos for visual learning.</p>
+                <div class="type-count">23 files</div>
+            </div>
+
+            <div class="type-card" onclick="filterByType('presentations')">
+                <div class="type-icon">
+                    <i class="fas fa-presentation"></i>
+                </div>
+                <h3 class="type-title">Presentations</h3>
+                <p class="type-description">Slide decks, PowerPoint presentations, and visual learning materials.</p>
+                <div class="type-count">19 files</div>
+            </div>
+
+            <div class="type-card" onclick="filterByType('research')">
+                <div class="type-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3 class="type-title">Research Papers</h3>
+                <p class="type-description">Academic papers, articles, and research materials for advanced study.</p>
+                <div class="type-count">8 files</div>
+            </div>
+        </div>
+
+        <!-- All Resources -->
+        <div class="resources-container">
+            <div class="resources-header">
+                <h3 class="resources-title">
+                    <i class="fas fa-th-large"></i>
+                    All Resources
+                </h3>
+                <div class="filter-controls">
+                    <select class="filter-select" id="filterClass" onchange="filterResources()">
+                        <option value="all">All Classes</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="physics">Physics</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="chemistry">Chemistry</option>
+                    </select>
+                    <select class="filter-select" id="filterType" onchange="filterResources()">
+                        <option value="all">All Types</option>
+                        <option value="pdf">PDF Documents</option>
+                        <option value="video">Videos</option>
+                        <option value="presentation">Presentations</option>
+                        <option value="document">Word Documents</option>
+                        <option value="spreadsheet">Spreadsheets</option>
+                    </select>
+                    <input type="text" class="search-box" id="searchResources" placeholder="Search resources..." onkeyup="searchResources()">
+                </div>
+            </div>
+            <div class="resources-grid" id="resourcesGrid">
+                <!-- Resources will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-container">
+            <div class="activity-header">
+                <h3 class="activity-title">
+                    <i class="fas fa-history"></i>
+                    Recent Activity
+                </h3>
+                <button class="btn btn-secondary" onclick="viewAllActivity()">
+                    View All
+                </button>
+            </div>
+            <div class="activity-list" id="activityList">
+                <!-- Activity items will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Study Tools -->
+        <div class="tools-container">
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-highlighter"></i>
+                </div>
+                <h3 class="tool-title">Study Planner</h3>
+                <p class="tool-description">Create customized study schedules and track your progress.</p>
+                <button class="btn btn-secondary" onclick="openStudyPlanner()">
+                    <i class="fas fa-calendar-plus"></i>
+                    Plan Study Session
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="tool-title">Flashcard Creator</h3>
+                <p class="tool-description">Create digital flashcards for quick review and memorization.</p>
+                <button class="btn btn-secondary" onclick="openFlashcardCreator()">
+                    <i class="fas fa-plus-circle"></i>
+                    Create Flashcards
+                </button>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="tool-title">Progress Tracker</h3>
+                <p class="tool-description">Track your learning progress and identify areas for improvement.</p>
+                <button class="btn btn-secondary" onclick="openProgressTracker()">
+                    <i class="fas fa-chart-bar"></i>
+                    View Progress
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Upload Resource
+                </h2>
+                <button class="close-modal" onclick="closeUploadModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm">
+                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Click to Upload Files</h3>
+                        <p>Drag and drop files here or click to browse</p>
+                        <p style="font-size: 0.9rem; color: #aaa; margin-top: 1rem;">
+                            Supported formats: PDF, DOC, PPT, XLS, MP4, JPG, PNG (Max 100MB each)
+                        </p>
+                    </div>
+                    <input type="file" id="fileInput" style="display: none;" multiple onchange="handleFileSelect(this.files)">
+
+                    <div class="file-list" id="fileList">
+                        <!-- Selected files will appear here -->
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Resource Title *</label>
+                            <input type="text" class="form-input" id="resourceTitle" placeholder="e.g., Calculus Lecture Notes Week 5" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Class *</label>
+                            <select class="form-select" id="resourceClass" required>
+                                <option value="">Select Class</option>
+                                <option value="Advanced Mathematics">Advanced Mathematics</option>
+                                <option value="Quantum Physics">Quantum Physics</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Organic Chemistry">Organic Chemistry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Resource Type *</label>
+                            <select class="form-select" id="resourceType" required>
+                                <option value="">Select Type</option>
+                                <option value="lecture-notes">Lecture Notes</option>
+                                <option value="assignment">Assignment</option>
+                                <option value="textbook">Textbook/eBook</option>
+                                <option value="video">Video Lecture</option>
+                                <option value="presentation">Presentation</option>
+                                <option value="research-paper">Research Paper</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Visibility</label>
+                            <select class="form-select" id="resourceVisibility">
+                                <option value="private">Private (Only Me)</option>
+                                <option value="class">Class Members</option>
+                                <option value="public">Public (All Students)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" id="resourceDescription" placeholder="Describe this resource..." rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tags (Optional)</label>
+                        <input type="text" class="form-input" id="resourceTags" placeholder="e.g., calculus, derivatives, week5">
+                        <div style="font-size: 0.85rem; color: #aaa; margin-top: 5px;">
+                            Separate tags with commas
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeUploadModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload"></i>
+                            Upload Resource
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resource Details Modal -->
+    <div class="modal" id="resourceDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="resourceDetailsTitle">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resource Details</span>
+                </h2>
+                <button class="close-modal" onclick="closeResourceDetailsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Resource Information</label>
+                        <div class="form-input" style="background: var(--glass-dark);">
+                            <p><strong>Type:</strong> <span id="detailResourceType">Loading...</span></p>
+                            <p><strong>Class:</strong> <span id="detailResourceClass">Loading...</span></p>
+                            <p><strong>Uploaded:</strong> <span id="detailUploadDate">Loading...</span></p>
+                            <p><strong>Size:</strong> <span id="detailFileSize">Loading...</span></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Statistics</label>
+                        <div class="form-input" style="background: var(--glass-dark);">
+                            <p><strong>Downloads:</strong> <span id="detailDownloads">Loading...</span></p>
+                            <p><strong>Views:</strong> <span id="detailViews">Loading...</span></p>
+                            <p><strong>Rating:</strong> <span id="detailRating">Loading...</span></p>
+                            <p><strong>Visibility:</strong> <span id="detailVisibility">Loading...</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <div class="form-textarea" style="background: var(--glass-dark); min-height: auto; padding: 1rem;">
+                        <p id="detailDescription">No description provided.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags</label>
+                    <div id="detailTags" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <!-- Tags will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="preview-section" id="previewSection">
+                    <div class="preview-header">
+                        <h3 class="preview-title">Preview</h3>
+                        <button class="btn btn-secondary" onclick="openFullPreview()">
+                            <i class="fas fa-expand"></i>
+                            Full Screen
+                        </button>
+                    </div>
+                    <div id="previewContent" style="text-align: center; padding: 2rem; background: rgba(0,0,0,0.2); border-radius: 10px;">
+                        <i class="fas fa-file-alt" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <p>Preview available for this file type</p>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-success" onclick="downloadResource()">
+                        <i class="fas fa-download"></i>
+                        Download
+                    </button>
+                    <button class="btn btn-primary" onclick="shareResource()">
+                        <i class="fas fa-share"></i>
+                        Share
+                    </button>
+                    <button class="btn btn-secondary" onclick="editResource()">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteResource()">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Planner Modal -->
+    <div class="modal" id="studyPlannerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-calendar-plus"></i>
+                    Study Planner
+                </h2>
+                <button class="close-modal" onclick="closeStudyPlannerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Study planner would go here -->
+                <div class="empty-state">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Study Planner</h3>
+                    <p>Plan your study sessions and track progress.</p>
+                    <div style="margin-top: 2rem; text-align: left;">
+                        <div style="background: var(--glass-dark); padding: 1.5rem; border-radius: 10px;">
+                            <h4 style="margin-bottom: 1rem;">Create Study Session</h4>
+                            <div class="form-group">
+                                <label class="form-label">Topic</label>
+                                <input type="text" class="form-input" placeholder="What will you study?">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Duration (hours)</label>
+                                    <input type="number" class="form-input" min="0.5" max="8" step="0.5" value="2">
+                                </div>
+                            </div>
+                            <div class="modal-actions" style="margin-top: 1.5rem;">
+                                <button class="btn btn-primary">Schedule Session</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Resources Data
+        let resources = [
+            {
+                id: 1,
+                title: "Calculus Derivatives Comprehensive Notes",
+                description: "Complete notes on derivatives, including rules, examples, and practice problems.",
+                type: "lecture-notes",
+                fileType: "pdf",
+                class: "Advanced Mathematics",
+                uploadedBy: "John Student",
+                uploadDate: "2023-06-10",
+                fileSize: "2.4 MB",
+                downloads: 142,
+                views: 287,
+                rating: 4.8,
+                tags: ["calculus", "derivatives", "mathematics", "week5"],
+                visibility: "class",
+                icon: "fa-book",
+                color: "#4361ee"
+            },
+            {
+                id: 2,
+                title: "Quantum Mechanics Lecture Recording",
+                description: "Full video lecture covering quantum superposition and entanglement.",
+                type: "video",
+                fileType: "mp4",
+                class: "Quantum Physics",
+                uploadedBy: "Prof. Michael Chen",
+                uploadDate: "2023-06-08",
+                fileSize: "145.2 MB",
+                downloads: 89,
+                views: 156,
+                rating: 4.9,
+                tags: ["physics", "quantum", "lecture", "video"],
+                visibility: "public",
+                icon: "fa-video",
+                color: "#4cc9f0"
+            },
+            {
+                id: 3,
+                title: "Web Development Project Guidelines",
+                description: "Detailed guidelines and requirements for the final web portfolio project.",
+                type: "assignment",
+                fileType: "pdf",
+                class: "Web Development",
+                uploadedBy: "Alex Rivera",
+                uploadDate: "2023-06-05",
+                fileSize: "1.8 MB",
+                downloads: 67,
+                views: 134,
+                rating: 4.5,
+                tags: ["web", "project", "guidelines", "html", "css"],
+                visibility: "class",
+                icon: "fa-tasks",
+                color: "#f72585"
+            },
+            {
+                id: 4,
+                title: "Organic Chemistry Textbook Chapter 3",
+                description: "Digital textbook chapter covering organic compounds and reactions.",
+                type: "textbook",
+                fileType: "pdf",
+                class: "Organic Chemistry",
+                uploadedBy: "Dr. Emily Wilson",
+                uploadDate: "2023-06-01",
+                fileSize: "8.7 MB",
+                downloads: 54,
+                views: 98,
+                rating: 4.7,
+                tags: ["chemistry", "textbook", "organic", "chapter3"],
+                visibility: "public",
+                icon: "fa-book-open",
+                color: "#f8961e"
+            },
+            {
+                id: 5,
+                title: "Linear Algebra Presentation Slides",
+                description: "Presentation slides covering matrix operations and linear transformations.",
+                type: "presentation",
+                fileType: "ppt",
+                class: "Advanced Mathematics",
+                uploadedBy: "Dr. Sarah Johnson",
+                uploadDate: "2023-05-28",
+                fileSize: "5.3 MB",
+                downloads: 76,
+                views: 112,
+                rating: 4.6,
+                tags: ["algebra", "matrices", "presentation", "slides"],
+                visibility: "class",
+                icon: "fa-presentation",
+                color: "#7209b7"
+            },
+            {
+                id: 6,
+                title: "JavaScript Advanced Concepts Tutorial",
+                description: "Video tutorial covering advanced JavaScript concepts and patterns.",
+                type: "video",
+                fileType: "mp4",
+                class: "Web Development",
+                uploadedBy: "Alex Rivera",
+                uploadDate: "2023-05-25",
+                fileSize: "98.5 MB",
+                downloads: 121,
+                views: 245,
+                rating: 4.9,
+                tags: ["javascript", "tutorial", "programming", "web"],
+                visibility: "public",
+                icon: "fa-video",
+                color: "#f72585"
+            },
+            {
+                id: 7,
+                title: "Physics Lab Report Template",
+                description: "Template for physics lab reports with formatting guidelines.",
+                type: "document",
+                fileType: "doc",
+                class: "Quantum Physics",
+                uploadedBy: "John Student",
+                uploadDate: "2023-05-20",
+                fileSize: "0.8 MB",
+                downloads: 45,
+                views: 89,
+                rating: 4.4,
+                tags: ["physics", "lab", "template", "report"],
+                visibility: "class",
+                icon: "fa-file-alt",
+                color: "#4cc9f0"
+            },
+            {
+                id: 8,
+                title: "Research Paper: AI in Education",
+                description: "Recent research paper on artificial intelligence applications in education.",
+                type: "research-paper",
+                fileType: "pdf",
+                class: "Computer Science",
+                uploadedBy: "Dr. Robert Kim",
+                uploadDate: "2023-05-15",
+                fileSize: "3.2 MB",
+                downloads: 32,
+                views: 67,
+                rating: 4.8,
+                tags: ["research", "ai", "education", "paper"],
+                visibility: "public",
+                icon: "fa-flask",
+                color: "#38b000"
+            }
+        ];
+
+        // Activity Data
+        let activities = [
+            { type: "upload", user: "John Student", resource: "Calculus Notes", time: "2 hours ago" },
+            { type: "download", user: "Emma Wilson", resource: "Physics Lab Template", time: "4 hours ago" },
+            { type: "share", user: "Alex Rivera", resource: "Web Development Guidelines", time: "1 day ago" },
+            { type: "comment", user: "Mike Chen", resource: "Quantum Mechanics Video", time: "1 day ago" },
+            { type: "rating", user: "Sarah Johnson", resource: "Linear Algebra Slides", time: "2 days ago" }
+        ];
+
+        // Current State
+        let selectedResourceId = null;
+        let selectedFiles = [];
+        let currentClassFilter = 'all';
+        let currentTypeFilter = 'all';
+        let currentResourceType = 'all';
+
+        // DOM Elements
+        const resourcesGrid = document.getElementById('resourcesGrid');
+        const activityList = document.getElementById('activityList');
+        const uploadModal = document.getElementById('uploadModal');
+        const resourceDetailsModal = document.getElementById('resourceDetailsModal');
+        const studyPlannerModal = document.getElementById('studyPlannerModal');
+        const totalResources = document.getElementById('totalResources');
+        const storageUsed = document.getElementById('storageUsed');
+        const totalDownloads = document.getElementById('totalDownloads');
+        const sharedResources = document.getElementById('sharedResources');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderResourcesGrid();
+            renderActivityList();
+            updateStats();
+            setupEventListeners();
+        });
+
+        function renderResourcesGrid() {
+            let filteredResources = filterResourcesData();
+            
+            if (filteredResources.length === 0) {
+                resourcesGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem;">
+                        <i class="fas fa-search"></i>
+                        <h3>No Resources Found</h3>
+                        <p>Try adjusting your filters or upload new resources.</p>
+                        <button class="btn btn-primary" onclick="showUploadModal()" style="margin-top: 1.5rem;">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            Upload First Resource
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            resourcesGrid.innerHTML = '';
+            
+            filteredResources.forEach(resource => {
+                const resourceCard = document.createElement('div');
+                resourceCard.className = 'resource-card';
+                resourceCard.onclick = () => openResourceDetails(resource.id);
+                
+                resourceCard.innerHTML = `
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(45deg, ${resource.color}, ${darkenColor(resource.color, 20)})">
+                            <i class="fas ${resource.icon}"></i>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="action-btn" onclick="event.stopPropagation(); downloadResource(${resource.id})" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" onclick="event.stopPropagation(); shareResource(${resource.id})" title="Share">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="resource-title">${resource.title}</h3>
+                    <p class="resource-description">${resource.description}</p>
+                    <div class="resource-meta">
+                        <div class="resource-info">
+                            <div class="resource-size">
+                                <i class="fas fa-hdd"></i>
+                                <span>${resource.fileSize}</span>
+                            </div>
+                            <div class="resource-date">
+                                <i class="fas fa-calendar"></i>
+                                <span>${formatDate(resource.uploadDate)}</span>
+                            </div>
+                            <div class="resource-downloads">
+                                <i class="fas fa-download"></i>
+                                <span>${resource.downloads}</span>
+                            </div>
+                        </div>
+                        <div class="resource-class">
+                            ${resource.class}
+                        </div>
+                    </div>
+                `;
+                
+                resourcesGrid.appendChild(resourceCard);
+            });
+        }
+
+        function filterResourcesData() {
+            let filtered = [...resources];
+            
+            // Filter by class
+            if (currentClassFilter !== 'all') {
+                filtered = filtered.filter(r => r.class.toLowerCase().includes(currentClassFilter.toLowerCase()));
+            }
+            
+            // Filter by file type
+            if (currentTypeFilter !== 'all') {
+                filtered = filtered.filter(r => r.fileType === currentTypeFilter);
+            }
+            
+            // Filter by resource type
+            if (currentResourceType !== 'all') {
+                filtered = filtered.filter(r => r.type === currentResourceType);
+            }
+            
+            return filtered;
+        }
+
+        function filterResources() {
+            currentClassFilter = document.getElementById('filterClass').value;
+            currentTypeFilter = document.getElementById('filterType').value;
+            renderResourcesGrid();
+        }
+
+        function filterByType(type) {
+            currentResourceType = type;
+            renderResourcesGrid();
+            
+            // Update UI to show active filter
+            showNotification(`Showing ${type.replace('-', ' ')} resources`);
+        }
+
+        function searchResources() {
+            const searchTerm = document.getElementById('searchResources').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderResourcesGrid();
+                return;
+            }
+            
+            const filtered = resources.filter(resource => 
+                resource.title.toLowerCase().includes(searchTerm) ||
+                resource.description.toLowerCase().includes(searchTerm) ||
+                resource.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                resource.class.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filtered.length === 0) {
+                resourcesGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem;">
+                        <i class="fas fa-search"></i>
+                        <h3>No Results Found</h3>
+                        <p>No resources match "${searchTerm}"</p>
+                        <button class="btn btn-secondary" onclick="clearSearch()" style="margin-top: 1.5rem;">
+                            <i class="fas fa-times"></i>
+                            Clear Search
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            resourcesGrid.innerHTML = '';
+            filtered.forEach(resource => {
+                const resourceCard = document.createElement('div');
+                resourceCard.className = 'resource-card';
+                resourceCard.onclick = () => openResourceDetails(resource.id);
+                
+                resourceCard.innerHTML = `
+                    <div class="resource-header">
+                        <div class="resource-icon" style="background: linear-gradient(45deg, ${resource.color}, ${darkenColor(resource.color, 20)})">
+                            <i class="fas ${resource.icon}"></i>
+                        </div>
+                    </div>
+                    <h3 class="resource-title">${resource.title}</h3>
+                    <p class="resource-description">${resource.description}</p>
+                    <div class="resource-meta">
+                        <div class="resource-info">
+                            <div>${resource.fileSize}</div>
+                            <div>${formatDate(resource.uploadDate)}</div>
+                        </div>
+                        <div class="resource-class">${resource.class}</div>
+                    </div>
+                `;
+                
+                resourcesGrid.appendChild(resourceCard);
+            });
+        }
+
+        function clearSearch() {
+            document.getElementById('searchResources').value = '';
+            renderResourcesGrid();
+        }
+
+        function renderActivityList() {
+            activityList.innerHTML = '';
+            
+            activities.forEach(activity => {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-item';
+                
+                let icon = 'fa-upload';
+                let color = '#4361ee';
+                let action = 'uploaded';
+                
+                switch(activity.type) {
+                    case 'download':
+                        icon = 'fa-download';
+                        color = '#4cc9f0';
+                        action = 'downloaded';
+                        break;
+                    case 'share':
+                        icon = 'fa-share-alt';
+                        color = '#f72585';
+                        action = 'shared';
+                        break;
+                    case 'comment':
+                        icon = 'fa-comment';
+                        color = '#f8961e';
+                        action = 'commented on';
+                        break;
+                    case 'rating':
+                        icon = 'fa-star';
+                        color = '#ffd166';
+                        action = 'rated';
+                        break;
+                }
+                
+                activityItem.innerHTML = `
+                    <div class="activity-icon" style="background: linear-gradient(45deg, ${color}, ${darkenColor(color, 20)})">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4>${activity.user} ${action} "${activity.resource}"</h4>
+                        <p>${getActivityDescription(activity.type)}</p>
+                    </div>
+                    <div class="activity-time">${activity.time}</div>
+                `;
+                
+                activityList.appendChild(activityItem);
+            });
+        }
+
+        function getActivityDescription(type) {
+            const descriptions = {
+                'upload': 'Added new learning material',
+                'download': 'Accessed study resource',
+                'share': 'Shared with classmates',
+                'comment': 'Added helpful feedback',
+                'rating': 'Provided quality rating'
+            };
+            return descriptions[type] || 'Activity recorded';
+        }
+
+        function openResourceDetails(resourceId) {
+            selectedResourceId = resourceId;
+            const resource = resources.find(r => r.id === resourceId);
+            
+            if (!resource) return;
+            
+            document.getElementById('resourceDetailsTitle').innerHTML = `
+                <i class="fas ${resource.icon}"></i>
+                <span>${resource.title}</span>
+            `;
+            
+            document.getElementById('detailResourceType').textContent = formatResourceType(resource.type);
+            document.getElementById('detailResourceClass').textContent = resource.class;
+            document.getElementById('detailUploadDate').textContent = formatDate(resource.uploadDate);
+            document.getElementById('detailFileSize').textContent = resource.fileSize;
+            document.getElementById('detailDownloads').textContent = resource.downloads;
+            document.getElementById('detailViews').textContent = resource.views;
+            document.getElementById('detailRating').textContent = `${resource.rating}/5.0`;
+            document.getElementById('detailVisibility').textContent = formatVisibility(resource.visibility);
+            document.getElementById('detailDescription').textContent = resource.description;
+            
+            // Render tags
+            const tagsContainer = document.getElementById('detailTags');
+            tagsContainer.innerHTML = '';
+            resource.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.style.cssText = `
+                    background: rgba(255, 255, 255, 0.1);
+                    padding: 5px 12px;
+                    border-radius: 20px;
+                    font-size: 0.85rem;
+                `;
+                tagElement.textContent = tag;
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            // Set up preview
+            setupPreview(resource);
+            
+            resourceDetailsModal.style.display = 'flex';
+        }
+
+        function setupPreview(resource) {
+            const previewContent = document.getElementById('previewContent');
+            const previewSection = document.getElementById('previewSection');
+            
+            if (resource.fileType === 'pdf' || resource.fileType === 'doc' || resource.fileType === 'ppt') {
+                previewContent.innerHTML = `
+                    <i class="fas fa-file-${resource.fileType === 'pdf' ? 'pdf' : resource.fileType === 'doc' ? 'word' : 'powerpoint'}" 
+                       style="font-size: 4rem; color: ${resource.fileType === 'pdf' ? '#ef233c' : resource.fileType === 'doc' ? '#2b579a' : '#d24726'}; margin-bottom: 1rem;"></i>
+                    <h4>${resource.title}</h4>
+                    <p>${resource.fileType.toUpperCase()} Document • ${resource.fileSize}</p>
+                    <button class="btn btn-secondary" onclick="openFullPreview()" style="margin-top: 1rem;">
+                        <i class="fas fa-external-link-alt"></i>
+                        Open Full Preview
+                    </button>
+                `;
+                previewSection.style.display = 'block';
+            } else if (resource.fileType === 'mp4') {
+                previewContent.innerHTML = `
+                    <div style="position: relative;">
+                        <i class="fas fa-play-circle" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>Video Preview</h4>
+                        <p>Click play to preview video content</p>
+                        <button class="btn btn-primary" onclick="playVideoPreview()" style="margin-top: 1rem;">
+                            <i class="fas fa-play"></i>
+                            Play Preview
+                        </button>
+                    </div>
+                `;
+                previewSection.style.display = 'block';
+            } else {
+                previewSection.style.display = 'none';
+            }
+        }
+
+        function closeResourceDetailsModal() {
+            resourceDetailsModal.style.display = 'none';
+            selectedResourceId = null;
+        }
+
+        function showUploadModal() {
+            uploadModal.style.display = 'flex';
+        }
+
+        function closeUploadModal() {
+            uploadModal.style.display = 'none';
+            document.getElementById('uploadForm').reset();
+            document.getElementById('fileList').innerHTML = '';
+            selectedFiles = [];
+        }
+
+        function handleFileSelect(files) {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            
+            Array.from(files).forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas ${getFileIcon(file.type)}"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 500;">${file.name}</div>
+                            <div style="font-size: 0.85rem; color: #aaa;">${formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <button class="action-btn" onclick="removeFile(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                fileList.appendChild(fileItem);
+                
+                selectedFiles.push(file);
+            });
+            
+            // Auto-fill title if only one file
+            if (files.length === 1) {
+                const fileName = files[0].name.replace(/\.[^/.]+$/, ""); // Remove extension
+                document.getElementById('resourceTitle').value = fileName;
+            }
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            // Refresh file list display
+            handleFileSelect(selectedFiles);
+        }
+
+        function setupEventListeners() {
+            // Upload Form
+            document.getElementById('uploadForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                uploadResource();
+            });
+        }
+
+        function uploadResource() {
+            if (selectedFiles.length === 0) {
+                showNotification('Please select at least one file to upload');
+                return;
+            }
+            
+            const title = document.getElementById('resourceTitle').value;
+            const classSelect = document.getElementById('resourceClass').value;
+            const type = document.getElementById('resourceType').value;
+            const visibility = document.getElementById('resourceVisibility').value;
+            const description = document.getElementById('resourceDescription').value;
+            const tags = document.getElementById('resourceTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+            
+            // Create new resource
+            const newResource = {
+                id: resources.length + 1,
+                title: title,
+                description: description || 'No description provided.',
+                type: type,
+                fileType: getFileExtension(selectedFiles[0].name),
+                class: classSelect,
+                uploadedBy: "John Student",
+                uploadDate: new Date().toISOString().split('T')[0],
+                fileSize: formatFileSize(selectedFiles[0].size),
+                downloads: 0,
+                views: 0,
+                rating: 0,
+                tags: tags,
+                visibility: visibility,
+                icon: getResourceIcon(type),
+                color: getResourceColor(type)
+            };
+            
+            resources.unshift(newResource);
+            
+            // Add activity
+            activities.unshift({
+                type: "upload",
+                user: "John Student",
+                resource: title,
+                time: "Just now"
+            });
+            
+            renderResourcesGrid();
+            renderActivityList();
+            updateStats();
+            closeUploadModal();
+            showNotification('Resource uploaded successfully!');
+            
+            // Auto-open the new resource
+            setTimeout(() => openResourceDetails(newResource.id), 500);
+        }
+
+        function downloadResource(resourceId) {
+            const resource = resources.find(r => r.id === (resourceId || selectedResourceId));
+            if (!resource) return;
+            
+            resource.downloads++;
+            updateStats();
+            showNotification(`Downloading "${resource.title}"...`);
+            
+            // In a real app, this would trigger actual download
+            console.log('Downloading:', resource);
+        }
+
+        function shareResource(resourceId) {
+            const resource = resources.find(r => r.id === (resourceId || selectedResourceId));
+            if (!resource) return;
+            
+            const shareUrl = `${window.location.origin}/resources/${resource.id}`;
+            const shareText = `Check out this learning resource: ${resource.title}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: resource.title,
+                    text: shareText,
+                    url: shareUrl
+                });
+            } else {
+                navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+                showNotification('Share link copied to clipboard!');
+            }
+            
+            // Add activity
+            activities.unshift({
+                type: "share",
+                user: "John Student",
+                resource: resource.title,
+                time: "Just now"
+            });
+            renderActivityList();
+        }
+
+        function editResource() {
+            if (!selectedResourceId) return;
+            
+            const resource = resources.find(r => r.id === selectedResourceId);
+            if (!resource) return;
+            
+            // In a real app, open edit form
+            const newTitle = prompt('Edit resource title:', resource.title);
+            if (newTitle && newTitle.trim()) {
+                resource.title = newTitle.trim();
+                renderResourcesGrid();
+                closeResourceDetailsModal();
+                showNotification('Resource updated successfully!');
+            }
+        }
+
+        function deleteResource() {
+            if (!selectedResourceId) return;
+            
+            const resource = resources.find(r => r.id === selectedResourceId);
+            if (!resource) return;
+            
+            if (confirm(`Are you sure you want to delete "${resource.title}"?`)) {
+                resources = resources.filter(r => r.id !== selectedResourceId);
+                renderResourcesGrid();
+                updateStats();
+                closeResourceDetailsModal();
+                showNotification('Resource deleted successfully!');
+            }
+        }
+
+        function openFullPreview() {
+            showNotification('Opening full preview...');
+            // In a real app, this would open full-screen preview
+        }
+
+        function playVideoPreview() {
+            showNotification('Playing video preview...');
+            // In a real app, this would play video
+        }
+
+        function showSharedResources() {
+            currentResourceType = 'all';
+            currentClassFilter = 'all';
+            currentTypeFilter = 'all';
+            
+            // Show only public/shared resources
+            const shared = resources.filter(r => r.visibility !== 'private');
+            if (shared.length === 0) {
+                resourcesGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem;">
+                        <i class="fas fa-share-alt"></i>
+                        <h3>No Shared Resources</h3>
+                        <p>Share your resources with classmates to see them here.</p>
+                    </div>
+                `;
+            } else {
+                renderResourcesGrid();
+            }
+            
+            showNotification('Showing shared resources from all classes');
+        }
+
+        function openStudyPlanner() {
+            studyPlannerModal.style.display = 'flex';
+        }
+
+        function closeStudyPlannerModal() {
+            studyPlannerModal.style.display = 'none';
+        }
+
+        function openFlashcardCreator() {
+            showNotification('Opening flashcard creator...');
+            // In a real app, this would open flashcard tool
+        }
+
+        function openProgressTracker() {
+            showNotification('Opening progress tracker...');
+            // In a real app, this would open progress tracker
+        }
+
+        function viewAllActivity() {
+            showNotification('Showing all activity history...');
+            // In a real app, this would show full activity page
+        }
+
+        function updateStats() {
+            const total = resources.length;
+            const shared = resources.filter(r => r.visibility !== 'private').length;
+            const totalDownloadCount = resources.reduce((sum, r) => sum + r.downloads, 0);
+            
+            // Calculate storage used (simulated)
+            const storageMB = resources.reduce((sum, r) => {
+                const size = parseFloat(r.fileSize);
+                if (r.fileSize.includes('MB')) return sum + size;
+                if (r.fileSize.includes('GB')) return sum + (size * 1024);
+                return sum + (size / 1024); // KB to MB
+            }, 0);
+            
+            totalResources.textContent = total;
+            storageUsed.textContent = `${(storageMB / 1024).toFixed(1)} GB`;
+            totalDownloads.textContent = totalDownloadCount.toLocaleString();
+            sharedResources.textContent = shared;
+        }
+
+        // Helper Functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function formatFileSize(bytes) {
+            if (typeof bytes === 'string') return bytes;
+            
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getFileIcon(fileType) {
+            if (fileType.includes('pdf')) return 'fa-file-pdf';
+            if (fileType.includes('word') || fileType.includes('document')) return 'fa-file-word';
+            if (fileType.includes('powerpoint') || fileType.includes('presentation')) return 'fa-file-powerpoint';
+            if (fileType.includes('excel') || fileType.includes('spreadsheet')) return 'fa-file-excel';
+            if (fileType.includes('video')) return 'fa-file-video';
+            if (fileType.includes('image')) return 'fa-file-image';
+            return 'fa-file';
+        }
+
+        function getFileExtension(filename) {
+            return filename.split('.').pop().toLowerCase();
+        }
+
+        function getResourceIcon(type) {
+            const icons = {
+                'lecture-notes': 'fa-book',
+                'assignment': 'fa-tasks',
+                'textbook': 'fa-book-open',
+                'video': 'fa-video',
+                'presentation': 'fa-presentation',
+                'research-paper': 'fa-flask',
+                'document': 'fa-file-alt',
+                'default': 'fa-file'
+            };
+            return icons[type] || icons.default;
+        }
+
+        function getResourceColor(type) {
+            const colors = {
+                'lecture-notes': '#4361ee',
+                'assignment': '#f72585',
+                'textbook': '#f8961e',
+                'video': '#4cc9f0',
+                'presentation': '#7209b7',
+                'research-paper': '#38b000',
+                'document': '#9d4edd',
+                'default': '#4361ee'
+            };
+            return colors[type] || colors.default;
+        }
+
+        function formatResourceType(type) {
+            const types = {
+                'lecture-notes': 'Lecture Notes',
+                'assignment': 'Assignment',
+                'textbook': 'Textbook/eBook',
+                'video': 'Video Lecture',
+                'presentation': 'Presentation',
+                'research-paper': 'Research Paper',
+                'document': 'Document',
+                'default': 'Resource'
+            };
+            return types[type] || types.default;
+        }
+
+        function formatVisibility(visibility) {
+            const visibilityMap = {
+                'private': 'Private (Only Me)',
+                'class': 'Class Members',
+                'public': 'Public (All Students)'
+            };
+            return visibilityMap[visibility] || 'Private';
+        }
+
+        function darkenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #3a0ca3, #4361ee);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease-out;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            `;
+            notification.innerHTML = `<i class="fas fa-check-circle"></i><span>${message}</span>`;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize with sample data
+        updateStats();
+    </script>
+</body>
+</html>
